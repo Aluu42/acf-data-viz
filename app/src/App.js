@@ -291,67 +291,22 @@ class App extends Component {
       "title": "Austin",
       "latitude": 30.2672,
       "longitude": -97.7431,
-    }
+    },
+    {
+      "zoomLevel": 5,
+      "scale": 0.5,
+      "title": "San Francisco",
+      "latitude": 37.7749,
+      "longitude": -122.4194,
+    },
     ];
-
-    // add events to recalculate map position when the map is moved or zoomed
-    chart.events.on("mappositionchanged", updateCustomMarkers);
-
-    // this function will take current images on the map and create HTML elements for them
-    function updateCustomMarkers(event) {
-
-      // go through all of the images
-      imageSeries.mapImages.each(function (image) {
-        // check if it has corresponding HTML element
-        if (!image.dummyData || !image.dummyData.externalElement) {
-          // create onex
-          image.dummyData = {
-            externalElement: createCustomMarker(image)
-          };
-        }
-
-        // reposition the element accoridng to coordinates
-        let xy = chart.geoPointToSVG({ longitude: image.longitude, latitude: image.latitude });
-        image.dummyData.externalElement.style.top = xy.y + 'px';
-        image.dummyData.externalElement.style.left = xy.x + 'px';
-      });
-
-    }
-
-    // this function creates and returns a new marker element
-    function createCustomMarker(image) {
-
-      let chart = image.dataItem.component.chart;
-
-      // create holder
-      let holder = document.createElement('div');
-      holder.className = 'map-marker';
-      holder.title = image.dataItem.dataContext.title;
-      holder.style.position = 'absolute';
-
-      // maybe add a link to it?
-      if (undefined !== image.url) {
-        holder.onclick = function () {
-          window.location.href = image.url;
-        };
-        holder.className += ' map-clickable';
-      }
-
-      // create dot
-      let dot = document.createElement('div');
-      dot.className = 'dot';
-      holder.appendChild(dot);
-
-      // create pulse
-      let pulse = document.createElement('div');
-      pulse.className = 'pulse';
-      holder.appendChild(pulse);
-
-      // append the marker to the map container
-      chart.svgContainer.htmlElement.appendChild(holder);
-
-      return holder;
-    }
+    let circle = imageSeries.mapImages.template.createChild(am4core.Circle);
+    circle.radius = 2;
+    circle.fill = am4core.color("#000000");
+    circle.stroke = am4core.color("#000000");
+    circle.strokeWidth = 2;
+    circle.nonScaling = true;
+    circle.tooltipText = "{title}";
   }
 
   componentWillUnmount() {
