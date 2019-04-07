@@ -22,6 +22,9 @@ class App extends Component {
     // Set projection
     chart.projection = new am4maps.projections.Albers();
 
+    chart.zoomControl = new am4maps.ZoomControl();
+    chart.zoomControl.align = "left";
+
     // Create map polygon series
     let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
 
@@ -273,6 +276,9 @@ class App extends Component {
     let hs = polygonTemplate.states.create("hover");
     hs.properties.fill = am4core.color("#3c5bdc");
 
+    polygonTemplate.events.on("hit", function(ev) {
+      ev.target.series.chart.zoomToMapObject(ev.target)
+    });
 
     let imageSeries = chart.series.push(new am4maps.MapImageSeries());
     imageSeries.mapImages.template.propertyFields.longitude = "longitude";
