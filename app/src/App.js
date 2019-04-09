@@ -4,6 +4,7 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4maps from "@amcharts/amcharts4/maps";
 import am4geodata_usaLow from "@amcharts/amcharts4-geodata/usaLow";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import * as d3 from "d3"
 
 am4core.useTheme(am4themes_animated);
 
@@ -280,32 +281,61 @@ class App extends Component {
       ev.target.series.chart.zoomToMapObject(ev.target)
     });
 
+
     let imageSeries = chart.series.push(new am4maps.MapImageSeries());
     imageSeries.mapImages.template.propertyFields.longitude = "longitude";
     imageSeries.mapImages.template.propertyFields.latitude = "latitude";
+
     imageSeries.data = [
-    {
-      "zoomLevel": 5,
-      "scale": 0.5,
-      "title": "San Antonio",
-      "latitude": 29.4241,
-      "longitude": -98.4936,
-    },
-    {
-      "zoomLevel": 5,
-      "scale": 0.5,
-      "title": "Austin",
-      "latitude": 30.2672,
-      "longitude": -97.7431,
-    },
-    {
-      "zoomLevel": 5,
-      "scale": 0.5,
-      "title": "San Francisco",
-      "latitude": 37.7749,
-      "longitude": -122.4194,
-    },
+    // {
+    //   "zoomLevel": 5,
+    //   "scale": 0.5,
+    //   "title": "San Antonio",
+    //   "latitude": 29.4241,
+    //   "longitude": -98.4936,
+    // },
+    // {
+    //   "zoomLevel": 5,
+    //   "scale": 0.5,
+    //   "title": "Austin",
+    //   "latitude": 30.2672,
+    //   "longitude": -97.7431,
+    // },
+    // {
+    //   "zoomLevel": 5,
+    //   "scale": 0.5,
+    //   "title": "San Francisco",
+    //   "latitude": 37.7749,
+    //   "longitude": -122.4194,
+    // },
     ];
+
+    const csv = require('csv-parser');
+    const fs = require('fs');
+
+    fs.createReadStream('data.csv')
+      .pipe(csv())
+      .on('data', function(data) {
+        var i;
+        for (i = 0; i < data.length; i++) {
+          imageSeries.data.push(
+            {
+            "zoomLevel": 5,
+            "scale": 0.5,
+            "title": "San Antonio",
+            "latitude": data[i]['Latitude'],
+            "longitude": data[i]['Longitude'],
+            }
+          );
+        }
+      })
+      .on('end', () => {
+        console.log('CSV file successfully processed');
+      });
+
+
+
+
     let circle = imageSeries.mapImages.template.createChild(am4core.Circle);
     circle.radius = 2;
     circle.fill = am4core.color("#000000");
