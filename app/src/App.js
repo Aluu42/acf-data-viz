@@ -4,11 +4,66 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4maps from "@amcharts/amcharts4/maps";
 import am4geodata_usaLow from "@amcharts/amcharts4-geodata/usaLow";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+import Papa from 'papaparse';
+
+var csv = require('./data.csv');
 
 am4core.useTheme(am4themes_animated);
 
 class App extends Component {
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+    this.state = { visible: false, data: null };
+    this.renderMap = this.renderMap.bind(this);
+    this.renderSchoolData = this.renderSchoolData.bind(this);
+    this.loadData = this.loadData.bind(this);
+    this.dataCallback = this.dataCallback.bind(this);
+
+    console.log(this.loadData());
+  }
+
+  dataCallback = (results, file) => {
+    const dataObjects = [];
+
+    var i;
+    console.log("here2");
+    for (i = 0; i < results.data.length; i++) {
+      dataObjects.push({
+        "zoomLevel": 5,
+        "scale": 0.5,
+        "title": results.data[i].Institution,
+        "latitude": results.data[i].Latitude,
+        "longitude": results.data[i].Longitude,
+        "value": 100,
+      });
+    }
+
+    this.setState({data: dataObjects});
+  }
+
+  loadData = () => {
+    console.log("here");
+
+    let config = {
+      delimiter: ",",	// auto-detect
+      newline: "",	// auto-detect
+      header: true,
+      dynamicTyping: true,
+      complete: this.dataCallback,
+      download: true,
+      delimitersToGuess: [',', '\t', '|', ';', Papa.RECORD_SEP, Papa.UNIT_SEP]
+    };
+    console.log("Fuck", csv, config);
+    console.log(Papa.parse(csv, config));
+  }
+
+  renderSchoolData = (city) => {
+    this.setState({
+      visible: true
+    });
+  }
+
+  renderMap() {
     // Themes begin
     am4core.useTheme(am4themes_animated);
     // Themes end
@@ -276,36 +331,46 @@ class App extends Component {
     let hs = polygonTemplate.states.create("hover");
     hs.properties.fill = am4core.color("#3c5bdc");
 
-    polygonTemplate.events.on("hit", function(ev) {
-      ev.target.series.chart.zoomToMapObject(ev.target)
+    polygonTemplate.events.on("hit", function (ev) {
+      ev.target.series.chart.zoomToMapObject(ev.target);
+      console.log(ev.target);
     });
 
     let imageSeries = chart.series.push(new am4maps.MapImageSeries());
     imageSeries.mapImages.template.propertyFields.longitude = "longitude";
     imageSeries.mapImages.template.propertyFields.latitude = "latitude";
-    imageSeries.data = [
-    {
-      "zoomLevel": 5,
-      "scale": 0.5,
-      "title": "San Antonio",
-      "latitude": 29.4241,
-      "longitude": -98.4936,
-    },
-    {
-      "zoomLevel": 5,
-      "scale": 0.5,
-      "title": "Austin",
-      "latitude": 30.2672,
-      "longitude": -97.7431,
-    },
-    {
-      "zoomLevel": 5,
-      "scale": 0.5,
-      "title": "San Francisco",
-      "latitude": 37.7749,
-      "longitude": -122.4194,
-    },
-    ];
+    imageSeries.mapImages.template.propertyFields.value = "value";
+    console.log(this.state.data);
+    imageSeries.data = this.state.data;
+    // imageSeries.data = [
+    //   {
+    //     "zoomLevel": 5,
+    //     "scale": 0.5,
+    //     "title": "San Antonio",
+    //     "latitude": 29.4241,
+    //     "longitude": -98.4936,
+    //     "value": 100,
+    //     "state": "Texas",
+    //   },
+    //   {
+    //     "zoomLevel": 5,
+    //     "scale": 0.5,
+    //     "title": "Austin",
+    //     "latitude": 30.2672,
+    //     "longitude": -97.7431,
+    //     "value": 10000,
+    //     "state": "Texas",
+    //   },
+    //   {
+    //     "zoomLevel": 5,
+    //     "scale": 0.5,
+    //     "title": "San Francisco",
+    //     "latitude": 37.7749,
+    //     "longitude": -122.4194,
+    //     "value": 4000,
+    //     "state": "California",
+    //   },
+    // ];
     let circle = imageSeries.mapImages.template.createChild(am4core.Circle);
     circle.radius = 2;
     circle.fill = am4core.color("#000000");
@@ -313,6 +378,15 @@ class App extends Component {
     circle.strokeWidth = 2;
     circle.nonScaling = true;
     circle.tooltipText = "{title}";
+
+    circle.events.on("hit", function (ev) {
+      let city = ev.target.dataItem.dataContext.title;
+      this.renderSchoolData(city);
+    });
+  }
+
+  componentDidMount() {
+    this.renderMap();
   }
 
   componentWillUnmount() {
@@ -322,10 +396,16 @@ class App extends Component {
   }
 
   render() {
+    console.log("Fucking state", this.state);
+    let cityInfo;
+    if (this.state.visible) {
+      cityInfo = <text>hello</text>;
+    }
     return (
       <div class="contents">
         <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
-        <label class="infoText">Hover over states and cities to view more info</label>
+        {cityInfo}
+        <label class="infoText">Click on a state to view more info</label>
       </div>
     );
   }
