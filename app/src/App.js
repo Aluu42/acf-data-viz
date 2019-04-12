@@ -18,32 +18,48 @@ class App extends Component {
     this.renderSchoolData = this.renderSchoolData.bind(this);
     this.loadData = this.loadData.bind(this);
     this.dataCallback = this.dataCallback.bind(this);
-
-    console.log(this.loadData());
   }
 
   dataCallback = (results, file) => {
     const dataObjects = [];
 
     var i;
-    console.log("here2");
     for (i = 0; i < results.data.length; i++) {
+      let latitude;
+      let longitude;
+
+      let currLat = results.data[i].Latitude;
+      if(currLat != null) {
+        let lat = currLat.substring(0, currLat.length-2);
+        latitude = parseFloat(lat);
+      }
+      else {
+        latitude = results.data[i].Latitude;
+      }
+
+      let currLong = results.data[i].Longitude;
+      if(currLong != null) {
+        let long = currLong.substring(0, currLong.length-2);
+        longitude = -1 * parseFloat(long);
+      }
+      else {
+        longitude = results.data[i].Longitude;
+      }
       dataObjects.push({
         "zoomLevel": 5,
         "scale": 0.5,
         "title": results.data[i].Institution,
-        "latitude": results.data[i].Latitude,
-        "longitude": results.data[i].Longitude,
+        "latitude": latitude,
+        "longitude": longitude,
         "value": 100,
       });
     }
-
-    this.setState({data: dataObjects});
+    this.setState({data: dataObjects}, (updatedState) => {
+      this.renderMap();
+    });
   }
 
   loadData = () => {
-    console.log("here");
-
     let config = {
       delimiter: ",",	// auto-detect
       newline: "",	// auto-detect
@@ -340,7 +356,6 @@ class App extends Component {
     imageSeries.mapImages.template.propertyFields.longitude = "longitude";
     imageSeries.mapImages.template.propertyFields.latitude = "latitude";
     imageSeries.mapImages.template.propertyFields.value = "value";
-    console.log(this.state.data);
     imageSeries.data = this.state.data;
     // imageSeries.data = [
     //   {
@@ -386,7 +401,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.renderMap();
+    this.loadData();
+    // this.renderMap();
   }
 
   componentWillUnmount() {
