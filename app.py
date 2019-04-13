@@ -42,8 +42,10 @@ def cleanScholarshipData():
     scholarships = scholarships[scholarships['Latitude'] > bottom]
     scholarships = scholarships[scholarships['Latitude'] < top]
 
-    scholarshipsAgg = scholarships.groupby(['Institution', 'Latitude', 'Longitude', 'State'])[["GrantAmt"]].sum().reset_index()
+    scholarshipsAgg = scholarships.groupby(['Institution', 'Latitude', 'Longitude', 'State']).agg({"GrantAmt": ["sum", "count"]}).reset_index()
 
+    scholarshipsAgg.columns = ['Institution', 'Latitude', 'Longitude', 'State', 'GrantAmtSum', 'GrantAmtCount']
+    print(scholarshipsAgg.head(5))
     return scholarshipsAgg
 
 
@@ -53,14 +55,15 @@ def generateMap():
     state_ys = [us_states[code]["lats"] for code in us_states]
 
     scholarships = cleanScholarshipData()
-    stateTotals = scholarships.groupby(['State'])[["GrantAmt"]].sum().reset_index()
+    stateTotals = scholarships.groupby(['State'])[["GrantAmtSum"]].sum().reset_index()
+
 
     source = ColumnDataSource(data=dict(
         x=scholarships['Longitude'].values,
         y=scholarships['Latitude'].values,
         school=scholarships['Institution'],
-        grantAmt = scholarships['GrantAmt']
-
+        grantAmt = scholarships['GrantAmtSum'],
+        grantCnt = scholarships['GrantAmtCount']
     ))
 
 
@@ -95,7 +98,7 @@ def generateMap():
     g1 = Cross(x='x', y='y')
     g1_r = p.add_glyph(source_or_glyph=source, glyph=g1)
     g1_hover = HoverTool(renderers=[g1_r],
-                             tooltips=[('School', '@school'), ('GrantAmt', '@grantAmt')])
+                             tooltips=[('School', '@school'), ('Total Scholarships', '@grantCnt'), ('Total Scholarship $', '@grantAmt')])
     p.add_tools(g1_hover)
 
     show(p)
