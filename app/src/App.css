@@ -55,6 +55,11 @@
   position: absolute;
 }
 
+.cityInfo {
+  color: #295b68;
+  font-size: 165%;
+}
+
 /* .map-marker .dot {
   border: 2px solid #fff601;
   background: transparent;

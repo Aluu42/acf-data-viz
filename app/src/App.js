@@ -13,7 +13,7 @@ am4core.useTheme(am4themes_animated);
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { visible: false, data: null };
+    this.state = { visible: false, data: null, university: "" };
     this.renderMap = this.renderMap.bind(this);
     this.renderSchoolData = this.renderSchoolData.bind(this);
     this.loadData = this.loadData.bind(this);
@@ -69,14 +69,7 @@ class App extends Component {
       download: true,
       delimitersToGuess: [',', '\t', '|', ';', Papa.RECORD_SEP, Papa.UNIT_SEP]
     };
-    console.log("Fuck", csv, config);
     console.log(Papa.parse(csv, config));
-  }
-
-  renderSchoolData = (city) => {
-    this.setState({
-      visible: true
-    });
   }
 
   renderMap() {
@@ -395,14 +388,22 @@ class App extends Component {
     circle.tooltipText = "{title}";
 
     circle.events.on("hit", function (ev) {
-      let city = ev.target.dataItem.dataContext.title;
-      this.renderSchoolData(city);
+      let school = ev.target.dataItem.dataContext.title;
+      this.setState({
+        visible: true,
+        university: school,
+      });
+    }, this);
+  }
+
+  renderSchoolData = (city) => {
+    this.setState({
+      visible: true
     });
   }
 
   componentDidMount() {
     this.loadData();
-    // this.renderMap();
   }
 
   componentWillUnmount() {
@@ -412,15 +413,16 @@ class App extends Component {
   }
 
   render() {
-    console.log("Fucking state", this.state);
     let cityInfo;
     if (this.state.visible) {
-      cityInfo = <text>hello</text>;
+      cityInfo = <text>{this.state.university}</text>;
     }
     return (
       <div class="contents">
         <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
-        {cityInfo}
+        <div class="cityInfo">
+          {cityInfo}
+        </div>
         <label class="infoText">Click on a state to view more info</label>
       </div>
     );
