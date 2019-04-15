@@ -7,6 +7,7 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import Papa from 'papaparse';
 
 var csv = require('./data.csv');
+const dataObjects = [];
 
 am4core.useTheme(am4themes_animated);
 
@@ -21,40 +22,49 @@ class App extends Component {
   }
 
   dataCallback = (results, file) => {
-    const dataObjects = [];
+    let currSchool = results.data[0].Institution;
+    let totalGrant = 0; 
+    let latitude = results.data[0].Latitude;
+    let longitude = results.data[0].Longitude;
 
-    var i;
-    for (i = 0; i < results.data.length; i++) {
-      let latitude;
-      let longitude;
+    var i = 0;
+    while (i < results.data.length) {
+      let grantAmount = results.data[i].GrantAmt.substring(1);
+      grantAmount = grantAmount.replace(',', "");
+      grantAmount = parseFloat(grantAmount);
 
-      let currLat = results.data[i].Latitude;
-      if(currLat != null) {
-        let lat = currLat.substring(0, currLat.length-2);
-        latitude = parseFloat(lat);
+      if (currSchool === results.data[i].Institution) {
+        let currLat = results.data[i].Latitude;
+        if (currLat != null) {
+          let lat = currLat.substring(0, currLat.length - 2);
+          latitude = parseFloat(lat);
+        }
+
+        let currLong = results.data[i].Longitude;
+        if (currLong != null) {
+          let long = currLong.substring(0, currLong.length - 2);
+          longitude = -1 * parseFloat(long);
+        }
+        totalGrant += grantAmount;
+        i++;
       }
-      else {
+      else { 
+        dataObjects.push({
+          "zoomLevel": 5,
+          "scale": 0.5,
+          "title": currSchool,  
+          "latitude": latitude,
+          "longitude": longitude,
+          "totalGrant": totalGrant,
+        });
+        currSchool = results.data[i].Institution;
+        totalGrant = 0;
         latitude = results.data[i].Latitude;
-      }
-
-      let currLong = results.data[i].Longitude;
-      if(currLong != null) {
-        let long = currLong.substring(0, currLong.length-2);
-        longitude = -1 * parseFloat(long);
-      }
-      else {
         longitude = results.data[i].Longitude;
       }
-      dataObjects.push({
-        "zoomLevel": 5,
-        "scale": 0.5,
-        "title": results.data[i].Institution,
-        "latitude": latitude,
-        "longitude": longitude,
-        "value": 100,
-      });
     }
-    this.setState({data: dataObjects}, (updatedState) => {
+    console.log(results.data);
+    this.setState({ data: dataObjects }, (updatedState) => {
       this.renderMap();
     });
   }
@@ -69,7 +79,7 @@ class App extends Component {
       download: true,
       delimitersToGuess: [',', '\t', '|', ';', Papa.RECORD_SEP, Papa.UNIT_SEP]
     };
-    console.log(Papa.parse(csv, config));
+    Papa.parse(csv, config);
   }
 
   renderMap() {
@@ -385,7 +395,7 @@ class App extends Component {
     circle.stroke = am4core.color("#000000");
     circle.strokeWidth = 2;
     circle.nonScaling = true;
-    circle.tooltipText = "{title}";
+    circle.tooltipText = "{title}: $ {totalGrant}";
 
     circle.events.on("hit", function (ev) {
       let school = ev.target.dataItem.dataContext.title;
