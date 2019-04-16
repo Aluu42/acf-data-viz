@@ -5,6 +5,7 @@ import * as am4maps from "@amcharts/amcharts4/maps";
 import am4geodata_usaLow from "@amcharts/amcharts4-geodata/usaLow";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import Papa from 'papaparse';
+import zipcodes from 'zipcodes';
 
 var csv = require('./data.csv');
 const dataObjects = [];
@@ -26,6 +27,7 @@ class App extends Component {
     let totalGrant = 0; 
     let latitude = results.data[0].Latitude;
     let longitude = results.data[0].Longitude;
+    let currState = zipcodes.lookup(results.data[0].PayeeZip).state;
 
     var i = 0;
     while (i < results.data.length) {
@@ -45,6 +47,17 @@ class App extends Component {
           let long = currLong.substring(0, currLong.length - 2);
           longitude = -1 * parseFloat(long);
         }
+
+        let state = zipcodes.lookup(results.data[i].PayeeZip);
+        if (state === null) {
+          currState = "";
+        }
+        else {
+          if (state != null) {
+            currState = "US-" + state.state;
+          }
+        }
+
         totalGrant += grantAmount;
         i++;
       }
@@ -56,14 +69,12 @@ class App extends Component {
           "latitude": latitude,
           "longitude": longitude,
           "totalGrant": totalGrant,
+          "state": currState,
         });
         currSchool = results.data[i].Institution;
         totalGrant = 0;
-        latitude = results.data[i].Latitude;
-        longitude = results.data[i].Longitude;
       }
     }
-    console.log(results.data);
     this.setState({ data: dataObjects }, (updatedState) => {
       this.renderMap();
     });
@@ -317,6 +328,24 @@ class App extends Component {
       }
     ];
 
+    // put sum in value of data array 
+
+    var i; 
+    for (i = 0; i < polygonSeries.data.length; i++) {
+
+      // filter array by each state id
+      let currState = polygonSeries.data[i].id;
+      let stateArr = dataObjects.filter((obj) => {
+        return obj.state === polygonSeries.data[i].id;
+      });
+      
+      // sum up the values in each subarray
+      let sum = stateArr.reduce((a, b) => a + b.totalGrant, 0);
+
+      // put sum in value of data array 
+      polygonSeries.data[i].value = sum;
+    }
+
     // Set up heat legend
     let heatLegend = chart.createChild(am4maps.HeatLegend);
     heatLegend.series = polygonSeries;
@@ -342,7 +371,7 @@ class App extends Component {
 
     // Configure series tooltip
     let polygonTemplate = polygonSeries.mapPolygons.template;
-    polygonTemplate.tooltipText = "{name}: {value}";
+    polygonTemplate.tooltipText = "{name}: ${value}";
     polygonTemplate.nonScalingStroke = true;
     polygonTemplate.strokeWidth = 0.5;
 
@@ -395,7 +424,7 @@ class App extends Component {
     circle.stroke = am4core.color("#000000");
     circle.strokeWidth = 2;
     circle.nonScaling = true;
-    circle.tooltipText = "{title}: $ {totalGrant}";
+    circle.tooltipText = "{title}: ${totalGrant}";
 
     circle.events.on("hit", function (ev) {
       let school = ev.target.dataItem.dataContext.title;
