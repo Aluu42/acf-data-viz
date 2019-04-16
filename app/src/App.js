@@ -48,13 +48,21 @@ class App extends Component {
           longitude = -1 * parseFloat(long);
         }
 
-        let state = zipcodes.lookup(results.data[i].PayeeZip);
+        let state = zipcodes.lookup(parseInt(results.data[i].PayeeZip));
         if (state === null) {
           currState = "";
         }
         else {
           if (state != null) {
             currState = "US-" + state.state;
+          }
+          else {
+            let parseCity = results.data[i].PayeeCityStZip.split(',')[1].trim();
+            parseCity = parseCity.split(' ')[0];
+            currState = "US-" + parseCity;
+            if (currState === "US-") {
+              console.log(results.data[i]);
+            }
           }
         }
 
@@ -112,14 +120,6 @@ class App extends Component {
 
     // Create map polygon series
     let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
-
-    //Set min/max fill color for each area
-    polygonSeries.heatRules.push({
-      property: "fill",
-      target: polygonSeries.mapPolygons.template,
-      min: chart.colors.getIndex(1).brighten(1),
-      max: chart.colors.getIndex(1).brighten(-0.3)
-    });
 
     // Make map load polygon data (state shapes and names) from GeoJSON
     polygonSeries.useGeodata = true;
@@ -328,8 +328,8 @@ class App extends Component {
       }
     ];
 
-    // put sum in value of data array 
-
+    let minValue = 0;
+    let maxValue = 0;
     var i; 
     for (i = 0; i < polygonSeries.data.length; i++) {
 
@@ -344,7 +344,23 @@ class App extends Component {
 
       // put sum in value of data array 
       polygonSeries.data[i].value = sum;
+
+      if (sum < minValue) {
+        minValue = sum; 
+      }
+      if (sum > maxValue) {
+        maxValue = sum;
+      }
     }
+
+    polygonSeries.heatRules.push({
+      property: "fill",
+      target: polygonSeries.mapPolygons.template,
+      min: chart.colors.getIndex(1).brighten(1),
+      max: chart.colors.getIndex(1).brighten(-0.3),
+      minValue: minValue,
+      maxValue: maxValue/100,
+    });
 
     // Set up heat legend
     let heatLegend = chart.createChild(am4maps.HeatLegend);
