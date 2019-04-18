@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4maps from "@amcharts/amcharts4/maps";
+import * as am4charts from "@amcharts/amcharts4/charts";
 import am4geodata_usaLow from "@amcharts/amcharts4-geodata/usaLow";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import Papa from 'papaparse';
@@ -15,16 +16,22 @@ am4core.useTheme(am4themes_animated);
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { visible: false, data: null, university: "" };
+    this.state = {
+      visible: false,
+      data: null,
+      university: "",
+      grantamt: "",
+    };
     this.renderMap = this.renderMap.bind(this);
     this.renderSchoolData = this.renderSchoolData.bind(this);
     this.loadData = this.loadData.bind(this);
     this.dataCallback = this.dataCallback.bind(this);
+    this.renderChart = this.renderChart.bind(this);
   }
 
   dataCallback = (results, file) => {
     let currSchool = results.data[0].Institution;
-    let totalGrant = 0; 
+    let totalGrant = 0;
     let latitude = results.data[0].Latitude;
     let longitude = results.data[0].Longitude;
     let currState = zipcodes.lookup(results.data[0].PayeeZip).state;
@@ -60,20 +67,17 @@ class App extends Component {
             let parseCity = results.data[i].PayeeCityStZip.split(',')[1].trim();
             parseCity = parseCity.split(' ')[0];
             currState = "US-" + parseCity;
-            if (currState === "US-") {
-              console.log(results.data[i]);
-            }
           }
         }
 
         totalGrant += grantAmount;
         i++;
       }
-      else { 
+      else {
         dataObjects.push({
           "zoomLevel": 5,
           "scale": 0.5,
-          "title": currSchool,  
+          "title": currSchool,
           "latitude": latitude,
           "longitude": longitude,
           "totalGrant": totalGrant,
@@ -128,217 +132,269 @@ class App extends Component {
     polygonSeries.data = [
       {
         id: "US-AL",
-        value: 4447100
+        value: 4447100,
+        schools: [],
       },
       {
         id: "US-AK",
-        value: 626932
+        value: 626932,
+        schools: [],
       },
       {
         id: "US-AZ",
-        value: 5130632
+        value: 5130632,
+        schools: [],
       },
       {
         id: "US-AR",
-        value: 2673400
+        value: 2673400,
+        schools: [],
       },
       {
         id: "US-CA",
-        value: 33871648
+        value: 33871648,
+        schools: [],
       },
       {
         id: "US-CO",
-        value: 4301261
+        value: 4301261,
+        schools: [],
       },
       {
         id: "US-CT",
-        value: 3405565
+        value: 3405565,
+        schools: [],
       },
       {
         id: "US-DE",
-        value: 783600
+        value: 783600,
+        schools: [],
       },
       {
         id: "US-FL",
-        value: 15982378
+        value: 15982378,
+        schools: [],
       },
       {
         id: "US-GA",
-        value: 8186453
+        value: 8186453,
+        schools: [],
       },
       {
         id: "US-HI",
-        value: 1211537
+        value: 1211537,
+        schools: [],
       },
       {
         id: "US-ID",
-        value: 1293953
+        value: 1293953,
+        schools: [],
       },
       {
         id: "US-IL",
-        value: 12419293
+        value: 12419293,
+        schools: [],
       },
       {
         id: "US-IN",
-        value: 6080485
+        value: 6080485,
+        schools: [],
       },
       {
         id: "US-IA",
-        value: 2926324
+        value: 2926324,
+        schools: [],
       },
       {
         id: "US-KS",
-        value: 2688418
+        value: 2688418,
+        schools: [],
       },
       {
         id: "US-KY",
-        value: 4041769
+        value: 4041769,
+        schools: [],
       },
       {
         id: "US-LA",
-        value: 4468976
+        value: 4468976,
+        schools: [],
       },
       {
         id: "US-ME",
-        value: 1274923
+        value: 1274923,
+        schools: [],
       },
       {
         id: "US-MD",
-        value: 5296486
+        value: 5296486,
+        schools: [],
       },
       {
         id: "US-MA",
-        value: 6349097
+        value: 6349097,
+        schools: [],
       },
       {
         id: "US-MI",
-        value: 9938444
+        value: 9938444,
+        schools: [],
       },
       {
         id: "US-MN",
-        value: 4919479
+        value: 4919479,
+        schools: [],
       },
       {
         id: "US-MS",
-        value: 2844658
+        value: 2844658,
+        schools: [],
       },
       {
         id: "US-MO",
-        value: 5595211
+        value: 5595211,
+        schools: [],
       },
       {
         id: "US-MT",
-        value: 902195
+        value: 902195,
+        schools: [],
       },
       {
         id: "US-NE",
-        value: 1711263
+        value: 1711263,
+        schools: [],
       },
       {
         id: "US-NV",
-        value: 1998257
+        value: 1998257,
+        schools: [],
       },
       {
         id: "US-NH",
-        value: 1235786
+        value: 1235786,
+        schools: [],
       },
       {
         id: "US-NJ",
-        value: 8414350
+        value: 8414350,
+        schools: [],
       },
       {
         id: "US-NM",
-        value: 1819046
+        value: 1819046,
+        schools: [],
       },
       {
         id: "US-NY",
-        value: 18976457
+        value: 18976457,
+        schools: [],
       },
       {
         id: "US-NC",
-        value: 8049313
+        value: 8049313,
+        schools: [],
       },
       {
         id: "US-ND",
-        value: 642200
+        value: 642200,
+        schools: [],
       },
       {
         id: "US-OH",
-        value: 11353140
+        value: 11353140,
+        schools: [],
       },
       {
         id: "US-OK",
-        value: 3450654
+        value: 3450654,
+        schools: [],
       },
       {
         id: "US-OR",
-        value: 3421399
+        value: 3421399,
+        schools: [],
       },
       {
         id: "US-PA",
-        value: 12281054
+        value: 12281054,
+        schools: [],
       },
       {
         id: "US-RI",
-        value: 1048319
+        value: 1048319,
+        schools: [],
       },
       {
         id: "US-SC",
-        value: 4012012
+        value: 4012012,
+        schools: [],
       },
       {
         id: "US-SD",
-        value: 754844
+        value: 754844,
+        schools: [],
       },
       {
         id: "US-TN",
-        value: 5689283
+        value: 5689283,
+        schools: [],
       },
       {
         id: "US-TX",
-        value: 20851820
+        value: 20851820,
+        schools: [],
       },
       {
         id: "US-UT",
-        value: 2233169
+        value: 2233169,
+        schools: [],
       },
       {
         id: "US-VT",
-        value: 608827
+        value: 608827,
+        schools: [],
       },
       {
         id: "US-VA",
-        value: 7078515
+        value: 7078515,
+        schools: [],
       },
       {
         id: "US-WA",
-        value: 5894121
+        value: 5894121,
+        schools: [],
       },
       {
         id: "US-WV",
-        value: 1808344
+        value: 1808344,
+        schools: [],
       },
       {
         id: "US-WI",
-        value: 5363675
+        value: 5363675,
+        schools: [],
       },
       {
         id: "US-WY",
-        value: 493782
+        value: 493782,
+        schools: [],
       }
     ];
 
     let minValue = 0;
     let maxValue = 0;
-    var i; 
+    var i;
+
     for (i = 0; i < polygonSeries.data.length; i++) {
 
       // filter array by each state id
       let currState = polygonSeries.data[i].id;
       let stateArr = dataObjects.filter((obj) => {
-        return obj.state === polygonSeries.data[i].id;
+        return obj.state === currState;
       });
-      
+      polygonSeries.data[i].schools = stateArr;
+
       // sum up the values in each subarray
       let sum = stateArr.reduce((a, b) => a + b.totalGrant, 0);
 
@@ -346,7 +402,7 @@ class App extends Component {
       polygonSeries.data[i].value = sum;
 
       if (sum < minValue) {
-        minValue = sum; 
+        minValue = sum;
       }
       if (sum > maxValue) {
         maxValue = sum;
@@ -359,7 +415,7 @@ class App extends Component {
       min: chart.colors.getIndex(1).brighten(1),
       max: chart.colors.getIndex(1).brighten(-0.3),
       minValue: minValue,
-      maxValue: maxValue/100,
+      maxValue: maxValue / 100,
     });
 
     // Set up heat legend
@@ -395,9 +451,10 @@ class App extends Component {
     let hs = polygonTemplate.states.create("hover");
     hs.properties.fill = am4core.color("#3c5bdc");
 
-    polygonTemplate.events.on("hit", function (ev) {
+    polygonTemplate.events.on("hit", (ev) => {
       ev.target.series.chart.zoomToMapObject(ev.target);
-      console.log(ev.target);
+      let state = ev.target.dataItem.dataContext;
+      // this.renderChart(state, polygonSeries.data);
     });
 
     let imageSeries = chart.series.push(new am4maps.MapImageSeries());
@@ -444,17 +501,57 @@ class App extends Component {
 
     circle.events.on("hit", function (ev) {
       let school = ev.target.dataItem.dataContext.title;
+      let grant = ev.target.dataItem.dataContext.totalGrant;
       this.setState({
         visible: true,
         university: school,
+        totalGrant: grant,
       });
     }, this);
+    
   }
 
   renderSchoolData = (city) => {
     this.setState({
       visible: true
     });
+  }
+
+  renderChart = (state, stateData) => {
+    console.log(state);
+    state = state.id.substring(3);
+    
+    let chart2 = am4core.create("chartdiv2", am4charts.XYChart);
+
+    // Add data
+    chart2.data = stateData[4].schools[0];
+
+    // Create axes
+    let categoryAxis = chart2.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = "title";
+    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.renderer.minGridDistance = 30;
+
+    categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
+      if (target.dataItem && target.dataItem.index & 2 == 2) {
+        return dy + 25;
+      }
+      return dy;
+    });
+
+    let valueAxis = chart2.yAxes.push(new am4charts.ValueAxis());
+
+    // Create series
+    let series = chart2.series.push(new am4charts.ColumnSeries());
+    series.dataFields.valueY = "value";
+    series.dataFields.categoryX = "title";
+    series.name = "Visits";
+    series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+    series.columns.template.fillOpacity = .8;
+
+    let columnTemplate = series.columns.template;
+    columnTemplate.strokeWidth = 2;
+    columnTemplate.strokeOpacity = 1;
   }
 
   componentDidMount() {
@@ -470,7 +567,7 @@ class App extends Component {
   render() {
     let cityInfo;
     if (this.state.visible) {
-      cityInfo = <text>{this.state.university}</text>;
+      cityInfo = <text>{this.state.university}: ${this.state.totalGrant}</text>;
     }
     return (
       <div class="contents">
@@ -478,7 +575,8 @@ class App extends Component {
         <div class="cityInfo">
           {cityInfo}
         </div>
-        <label class="infoText">Click on a state to view more info</label>
+        {/* <label class="infoText">Click on a state to view more info</label> */}
+        <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div>
       </div>
     );
   }
