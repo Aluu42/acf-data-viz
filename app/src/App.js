@@ -7,9 +7,14 @@ import am4geodata_usaLow from "@amcharts/amcharts4-geodata/usaLow";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import Papa from 'papaparse';
 import zipcodes from 'zipcodes';
+import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
+import {Typeahead} from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 var csv = require('./data.csv');
 const dataObjects = [];
+const states = [];
+const schools = [];
 
 am4core.useTheme(am4themes_animated);
 
@@ -84,6 +89,7 @@ class App extends Component {
           "state": currState,
         });
         currSchool = results.data[i].Institution;
+        schools.push(currSchool);
         totalGrant = 0;
       }
     }
@@ -390,6 +396,8 @@ class App extends Component {
 
       // filter array by each state id
       let currState = polygonSeries.data[i].id;
+      states.push(polygonSeries.data[i].id.substring(3));
+
       let stateArr = dataObjects.filter((obj) => {
         return obj.state === currState;
       });
@@ -576,7 +584,15 @@ class App extends Component {
           {cityInfo}
         </div>
         {/* <label class="infoText">Click on a state to view more info</label> */}
-        <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div>
+        {/* <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div> */}
+        <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
+    			// var states = this.listMovieRatings(selected);
+    			// this.setState({value: movieDetails});
+  			}} options={states} />
+        <Typeahead id="search-bar" placeholder="search by school" onChange={(selected) => {
+    			// var states = this.listMovieRatings(selected);
+    			// this.setState({value: movieDetails});
+  			}} options={schools} />
       </div>
     );
   }
