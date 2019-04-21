@@ -461,6 +461,7 @@ class App extends Component {
 
     polygonTemplate.events.on("hit", (ev) => {
       ev.target.series.chart.zoomToMapObject(ev.target);
+      console.log(ev.target);
       let state = ev.target.dataItem.dataContext;
       // this.renderChart(state, polygonSeries.data);
     });
@@ -591,7 +592,20 @@ class App extends Component {
   			}} options={states} />
         <Typeahead id="search-bar" placeholder="search by school" onChange={(selected) => {
     			// var states = this.listMovieRatings(selected);
-    			// this.setState({value: movieDetails});
+          // this.setState({value: movieDetails});
+          console.log(selected.toString());
+          let schoolGrant;
+          dataObjects.filter((obj) => {
+            if (obj.title === selected.toString()) {
+              schoolGrant = obj.totalGrant;
+              return obj.totalGrant;
+            }
+          });
+          this.setState({
+            visible: true,
+            university: selected,
+            totalGrant: schoolGrant,
+          });
   			}} options={schools} />
       </div>
     );
