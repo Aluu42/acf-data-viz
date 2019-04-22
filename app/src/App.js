@@ -13,8 +13,11 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 var csv = require('./data.csv');
 const dataObjects = [];
-const states = [];
-const schools = [];
+const statesMap = new Map();
+let statesArray = [];
+let schoolsArray = [];
+const schoolsMap = new Map();
+let sData = [];
 
 am4core.useTheme(am4themes_animated);
 
@@ -89,10 +92,17 @@ class App extends Component {
           "state": currState,
         });
         currSchool = results.data[i].Institution;
-        schools.push(currSchool);
+        schoolsArray.push(currSchool);
+        
         totalGrant = 0;
       }
     }
+
+    let index;
+    for (index = 0; index < dataObjects.length; index++) {
+      schoolsMap.set(dataObjects[index].title, dataObjects[index].totalGrant);
+    }
+
     this.setState({ data: dataObjects }, (updatedState) => {
       this.renderMap();
     });
@@ -396,7 +406,6 @@ class App extends Component {
 
       // filter array by each state id
       let currState = polygonSeries.data[i].id;
-      states.push(polygonSeries.data[i].id.substring(3));
 
       let stateArr = dataObjects.filter((obj) => {
         return obj.state === currState;
@@ -408,6 +417,9 @@ class App extends Component {
 
       // put sum in value of data array 
       polygonSeries.data[i].value = sum;
+      statesArray.push(polygonSeries.data[i].id.substring(3));
+      let stateString = polygonSeries.data[i].id.substring(3);
+      statesMap.set(stateString, sum);
 
       if (sum < minValue) {
         minValue = sum;
@@ -416,6 +428,7 @@ class App extends Component {
         maxValue = sum;
       }
     }
+    sData = polygonSeries.data;
 
     polygonSeries.heatRules.push({
       property: "fill",
@@ -527,7 +540,6 @@ class App extends Component {
   }
 
   renderChart = (state, stateData) => {
-    console.log(state);
     state = state.id.substring(3);
     
     let chart2 = am4core.create("chartdiv2", am4charts.XYChart);
@@ -587,13 +599,21 @@ class App extends Component {
         {/* <label class="infoText">Click on a state to view more info</label> */}
         {/* <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div> */}
         <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
-    			// var states = this.listMovieRatings(selected);
-    			// this.setState({value: movieDetails});
-  			}} options={states} />
+          let schoolsString = "";
+          sData.filter((obj) => {
+            if (obj.id.substring(3) === selected.toString()) {
+              let i;
+              for (i = 0; i < obj.schools.length; i++) {
+                schoolsString += obj.schools[i].title.toString() + ": $" + schoolsMap.get(obj.schools[i].title.toString()) + '\n';
+              }
+            }
+          });
+          this.setState({
+            visible: true,
+            university: schoolsString,
+          });
+  			}} options={statesArray} />
         <Typeahead id="search-bar" placeholder="search by school" onChange={(selected) => {
-    			// var states = this.listMovieRatings(selected);
-          // this.setState({value: movieDetails});
-          console.log(selected.toString());
           let schoolGrant;
           dataObjects.filter((obj) => {
             if (obj.title === selected.toString()) {
@@ -606,7 +626,7 @@ class App extends Component {
             university: selected,
             totalGrant: schoolGrant,
           });
-  			}} options={schools} />
+  			}} options={schoolsArray} />
       </div>
     );
   }
