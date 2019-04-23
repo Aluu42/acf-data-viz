@@ -8,8 +8,69 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import Papa from 'papaparse';
 import zipcodes from 'zipcodes';
 import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
-import {Typeahead} from 'react-bootstrap-typeahead';
+import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+
+import AL from "@amcharts/amcharts4-geodata/region/usa/alLow";
+import AK from "@amcharts/amcharts4-geodata/region/usa/akLow";
+import AR from "@amcharts/amcharts4-geodata/region/usa/arLow";
+import AZ from "@amcharts/amcharts4-geodata/region/usa/azLow";
+import CA from "@amcharts/amcharts4-geodata/region/usa/caLow";
+
+import CO from "@amcharts/amcharts4-geodata/region/usa/coLow";
+import CT from "@amcharts/amcharts4-geodata/region/usa/ctLow";
+import DE from "@amcharts/amcharts4-geodata/region/usa/deLow";
+import FL from "@amcharts/amcharts4-geodata/region/usa/flLow";
+
+import GA from "@amcharts/amcharts4-geodata/region/usa/gaLow";
+import HI from "@amcharts/amcharts4-geodata/region/usa/hiLow";
+import ID from "@amcharts/amcharts4-geodata/region/usa/idLow";
+import IL from "@amcharts/amcharts4-geodata/region/usa/ilLow";
+import IN from "@amcharts/amcharts4-geodata/region/usa/inLow";
+
+import IA from "@amcharts/amcharts4-geodata/region/usa/iaLow";
+import KS from "@amcharts/amcharts4-geodata/region/usa/ksLow";
+import KY from "@amcharts/amcharts4-geodata/region/usa/kyLow";
+import LA from "@amcharts/amcharts4-geodata/region/usa/laLow";
+import ME from "@amcharts/amcharts4-geodata/region/usa/meLow";
+
+import MD from "@amcharts/amcharts4-geodata/region/usa/mdLow";
+import MA from "@amcharts/amcharts4-geodata/region/usa/maLow";
+import MI from "@amcharts/amcharts4-geodata/region/usa/miLow";
+import MN from "@amcharts/amcharts4-geodata/region/usa/mnLow";
+import MS from "@amcharts/amcharts4-geodata/region/usa/msLow";
+
+import MO from "@amcharts/amcharts4-geodata/region/usa/moLow";
+import MT from "@amcharts/amcharts4-geodata/region/usa/mtLow";
+import NE from "@amcharts/amcharts4-geodata/region/usa/neLow";
+import NV from "@amcharts/amcharts4-geodata/region/usa/nvLow";
+import NH from "@amcharts/amcharts4-geodata/region/usa/nhLow";
+
+import NJ from "@amcharts/amcharts4-geodata/region/usa/njLow";
+import NM from "@amcharts/amcharts4-geodata/region/usa/nmLow";
+import NY from "@amcharts/amcharts4-geodata/region/usa/nyLow";
+import NC from "@amcharts/amcharts4-geodata/region/usa/ncLow";
+import ND from "@amcharts/amcharts4-geodata/region/usa/ndLow";
+
+import OH from "@amcharts/amcharts4-geodata/region/usa/ohLow";
+import OK from "@amcharts/amcharts4-geodata/region/usa/okLow";
+import OR from "@amcharts/amcharts4-geodata/region/usa/orLow";
+import PA from "@amcharts/amcharts4-geodata/region/usa/paLow";
+import RI from "@amcharts/amcharts4-geodata/region/usa/riLow";
+
+import SC from "@amcharts/amcharts4-geodata/region/usa/scLow";
+import SD from "@amcharts/amcharts4-geodata/region/usa/sdLow";
+import TN from "@amcharts/amcharts4-geodata/region/usa/tnLow";
+import TX from "@amcharts/amcharts4-geodata/region/usa/txLow";
+import UT from "@amcharts/amcharts4-geodata/region/usa/utLow";
+
+import VT from "@amcharts/amcharts4-geodata/region/usa/vtLow";
+import VA from "@amcharts/amcharts4-geodata/region/usa/vaLow";
+import WA from "@amcharts/amcharts4-geodata/region/usa/waLow";
+import WV from "@amcharts/amcharts4-geodata/region/usa/wvLow";
+import WI from "@amcharts/amcharts4-geodata/region/usa/wiLow";
+import WY from "@amcharts/amcharts4-geodata/region/usa/wyLow";
+
 
 var csv = require('./data.csv');
 const dataObjects = [];
@@ -93,7 +154,7 @@ class App extends Component {
         });
         currSchool = results.data[i].Institution;
         schoolsArray.push(currSchool);
-        
+
         totalGrant = 0;
       }
     }
@@ -150,251 +211,301 @@ class App extends Component {
         id: "US-AL",
         value: 4447100,
         schools: [],
+        stateMap: AL,
       },
       {
         id: "US-AK",
         value: 626932,
         schools: [],
+        stateMap: AK,
       },
       {
         id: "US-AZ",
         value: 5130632,
         schools: [],
+        stateMap: AZ,
       },
       {
         id: "US-AR",
         value: 2673400,
         schools: [],
+        stateMap: AR,
       },
       {
         id: "US-CA",
         value: 33871648,
         schools: [],
+        stateMap: CA,
       },
       {
         id: "US-CO",
         value: 4301261,
         schools: [],
+        stateMap: CO,
       },
       {
         id: "US-CT",
         value: 3405565,
         schools: [],
+        stateMap: CT,
       },
       {
         id: "US-DE",
         value: 783600,
         schools: [],
+        stateMap: DE,
       },
       {
         id: "US-FL",
         value: 15982378,
         schools: [],
+        stateMap: FL,
       },
       {
         id: "US-GA",
         value: 8186453,
         schools: [],
+        stateMap: GA,
       },
       {
         id: "US-HI",
         value: 1211537,
         schools: [],
+        stateMap: HI,
       },
       {
         id: "US-ID",
         value: 1293953,
         schools: [],
+        stateMap: ID,
       },
       {
         id: "US-IL",
         value: 12419293,
         schools: [],
+        stateMap: IL,
       },
       {
         id: "US-IN",
         value: 6080485,
         schools: [],
+        stateMap: IN,
       },
       {
         id: "US-IA",
         value: 2926324,
         schools: [],
+        stateMap: IA,
       },
       {
         id: "US-KS",
         value: 2688418,
         schools: [],
+        stateMap: KS,
       },
       {
         id: "US-KY",
         value: 4041769,
         schools: [],
+        stateMap: KY,
       },
       {
         id: "US-LA",
         value: 4468976,
         schools: [],
+        stateMap: LA,
       },
       {
         id: "US-ME",
         value: 1274923,
         schools: [],
+        stateMap: ME,
       },
       {
         id: "US-MD",
         value: 5296486,
         schools: [],
+        stateMap: MD,
       },
       {
         id: "US-MA",
         value: 6349097,
         schools: [],
+        stateMap: MA,
       },
       {
         id: "US-MI",
         value: 9938444,
         schools: [],
+        stateMap: MI,
       },
       {
         id: "US-MN",
         value: 4919479,
         schools: [],
+        stateMap: MN,
       },
       {
         id: "US-MS",
         value: 2844658,
         schools: [],
+        stateMap: MS,
       },
       {
         id: "US-MO",
         value: 5595211,
         schools: [],
+        stateMap: MO,
       },
       {
         id: "US-MT",
         value: 902195,
         schools: [],
+        stateMap: MT,
       },
       {
         id: "US-NE",
         value: 1711263,
         schools: [],
+        stateMap: NE,
       },
       {
         id: "US-NV",
         value: 1998257,
         schools: [],
+        stateMap: NV,
       },
       {
         id: "US-NH",
         value: 1235786,
         schools: [],
+        stateMap: NH,
       },
       {
         id: "US-NJ",
         value: 8414350,
         schools: [],
+        stateMap: NJ,
       },
       {
         id: "US-NM",
         value: 1819046,
         schools: [],
+        stateMap: NM,
       },
       {
         id: "US-NY",
         value: 18976457,
         schools: [],
+        stateMap: NY,
       },
       {
         id: "US-NC",
         value: 8049313,
         schools: [],
+        stateMap: NC,
       },
       {
         id: "US-ND",
         value: 642200,
         schools: [],
+        stateMap: ND,
       },
       {
         id: "US-OH",
         value: 11353140,
         schools: [],
+        stateMap: OH,
       },
       {
         id: "US-OK",
         value: 3450654,
         schools: [],
+        stateMap: OK,
       },
       {
         id: "US-OR",
         value: 3421399,
         schools: [],
+        stateMap: OR,
       },
       {
         id: "US-PA",
         value: 12281054,
         schools: [],
+        stateMap: PA,
       },
       {
         id: "US-RI",
         value: 1048319,
         schools: [],
+        stateMap: RI,
       },
       {
         id: "US-SC",
         value: 4012012,
         schools: [],
+        stateMap: SC,
       },
       {
         id: "US-SD",
         value: 754844,
         schools: [],
+        stateMap: SD,
       },
       {
         id: "US-TN",
         value: 5689283,
         schools: [],
+        stateMap: TN,
       },
       {
         id: "US-TX",
         value: 20851820,
         schools: [],
+        stateMap: TX,
       },
       {
         id: "US-UT",
         value: 2233169,
         schools: [],
+        stateMap: UT,
       },
       {
         id: "US-VT",
         value: 608827,
         schools: [],
+        stateMap: VT,
       },
       {
         id: "US-VA",
         value: 7078515,
         schools: [],
+        stateMap: VA,
       },
       {
         id: "US-WA",
         value: 5894121,
         schools: [],
+        stateMap: WA,
       },
       {
         id: "US-WV",
         value: 1808344,
         schools: [],
+        stateMap: WV,
       },
       {
         id: "US-WI",
         value: 5363675,
         schools: [],
+        stateMap: WI,
       },
       {
         id: "US-WY",
         value: 493782,
         schools: [],
+        stateMap: WY,
       }
     ];
 
@@ -473,9 +584,10 @@ class App extends Component {
     hs.properties.fill = am4core.color("#3c5bdc");
 
     polygonTemplate.events.on("hit", (ev) => {
-      ev.target.series.chart.zoomToMapObject(ev.target);
-      console.log(ev.target);
+      // ev.target.series.chart.zoomToMapObject(ev.target);
+      // console.log(ev.target);
       let state = ev.target.dataItem.dataContext;
+      this.renderState(state);
       // this.renderChart(state, polygonSeries.data);
     });
 
@@ -530,7 +642,7 @@ class App extends Component {
         totalGrant: grant,
       });
     }, this);
-    
+
   }
 
   renderSchoolData = (city) => {
@@ -541,11 +653,12 @@ class App extends Component {
 
   renderChart = (state, stateData) => {
     state = state.id.substring(3);
-    
+
     let chart2 = am4core.create("chartdiv2", am4charts.XYChart);
 
     // Add data
     chart2.data = stateData[4].schools[0];
+    console.log(stateData[4].schools[0]);
 
     // Create axes
     let categoryAxis = chart2.xAxes.push(new am4charts.CategoryAxis());
@@ -585,6 +698,71 @@ class App extends Component {
     }
   }
 
+  renderState = (state) => {
+    var chart = am4core.create("chartdiv", am4maps.MapChart);
+
+    // Set map definition
+    chart.geodata = state.stateMap;
+
+    // Set projection
+    chart.projection = new am4maps.projections.Miller();
+
+    // Create map polygon series
+    var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+
+    // Exclude Antartica
+    polygonSeries.exclude = ["AQ"];
+
+    // Make map load polygon (like country names) data from GeoJSON
+    polygonSeries.useGeodata = true;
+
+    chart.zoomControl = new am4maps.ZoomControl();
+    chart.zoomControl.align = "left";
+
+    // Configure series
+    var polygonTemplate = polygonSeries.mapPolygons.template;
+    polygonTemplate.tooltipText = "{name}";
+    polygonTemplate.fill = am4core.color("#74B266");
+
+    // Create hover state and set alternative fill color
+    var hs = polygonTemplate.states.create("hover");
+    hs.properties.fill = am4core.color("#367B25");
+
+    polygonTemplate.events.on("hit", (ev) => {
+      ev.target.series.chart.zoomToMapObject(ev.target);
+    });
+
+    let imageSeries = chart.series.push(new am4maps.MapImageSeries());
+    imageSeries.mapImages.template.propertyFields.longitude = "longitude";
+    imageSeries.mapImages.template.propertyFields.latitude = "latitude";
+    imageSeries.mapImages.template.propertyFields.value = "value";
+    imageSeries.data = dataObjects.filter((obj) => {
+      if (obj.state === state.id) {
+        return obj;
+      }
+    });
+    console.log(imageSeries.data);
+
+    let circle = imageSeries.mapImages.template.createChild(am4core.Circle);
+    circle.radius = 2;
+    circle.fill = am4core.color("#000000");
+    circle.stroke = am4core.color("#000000");
+    circle.strokeWidth = 2;
+    circle.nonScaling = true;
+    circle.tooltipText = "{title}: ${totalGrant}";
+
+    circle.events.on("hit", function (ev) {
+      let school = ev.target.dataItem.dataContext.title;
+      let grant = ev.target.dataItem.dataContext.totalGrant;
+      this.setState({
+        visible: true,
+        university: school,
+        totalGrant: grant,
+      });
+    }, this);
+
+  }
+
   render() {
     let cityInfo;
     if (this.state.visible) {
@@ -612,7 +790,7 @@ class App extends Component {
             visible: true,
             university: schoolsString,
           });
-  			}} options={statesArray} />
+        }} options={statesArray} />
         <Typeahead id="search-bar" placeholder="search by school" onChange={(selected) => {
           let schoolGrant;
           dataObjects.filter((obj) => {
@@ -626,7 +804,7 @@ class App extends Component {
             university: selected,
             totalGrant: schoolGrant,
           });
-  			}} options={schoolsArray} />
+        }} options={schoolsArray} />
       </div>
     );
   }
