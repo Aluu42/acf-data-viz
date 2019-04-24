@@ -7,6 +7,7 @@ import am4geodata_usaLow from "@amcharts/amcharts4-geodata/usaLow";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import Papa from 'papaparse';
 import zipcodes from 'zipcodes';
+import Banner from 'react-js-banner';
 import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
@@ -90,6 +91,7 @@ class App extends Component {
       data: null,
       university: "",
       grantamt: "",
+      bannerCSS: { color: "#FFF", backgroundColor: "#282c34", fontSize: 500 },
     };
     this.renderMap = this.renderMap.bind(this);
     this.renderSchoolData = this.renderSchoolData.bind(this);
@@ -760,7 +762,6 @@ class App extends Component {
         totalGrant: grant,
       });
     }, this);
-
   }
 
   render() {
@@ -769,42 +770,49 @@ class App extends Component {
       cityInfo = <text>{this.state.university}: ${this.state.totalGrant}</text>;
     }
     return (
-      <div class="contents">
-        <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
-        <div class="cityInfo">
-          {cityInfo}
+      <div class="wrap">
+        <div class="contents">
+          <Banner title="  " css={this.state.bannerCSS}/>
+          <div class="floatleft">
+            <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
+            <div class="cityInfo">
+              {cityInfo}
+            </div>
+            {/* <label class="infoText">Click on a state to view more info</label> */}
+            {/* <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div> */}
+            <div class="searchBars">
+              <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
+                let schoolsString = "";
+                sData.filter((obj) => {
+                  if (obj.id.substring(3) === selected.toString()) {
+                    let i;
+                    for (i = 0; i < obj.schools.length; i++) {
+                      schoolsString += obj.schools[i].title.toString() + ": $" + schoolsMap.get(obj.schools[i].title.toString()) + '\n';
+                    }
+                  }
+                });
+                this.setState({
+                  visible: true,
+                  university: schoolsString,
+                });
+              }} options={statesArray} />
+              <Typeahead id="search-bar" placeholder="search by school" onChange={(selected) => {
+                let schoolGrant;
+                dataObjects.filter((obj) => {
+                  if (obj.title === selected.toString()) {
+                    schoolGrant = obj.totalGrant;
+                    return obj.totalGrant;
+                  }
+                });
+                this.setState({
+                  visible: true,
+                  university: selected,
+                  totalGrant: schoolGrant,
+                });
+              }} options={schoolsArray} />
+            </div>
+          </div>
         </div>
-        {/* <label class="infoText">Click on a state to view more info</label> */}
-        {/* <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div> */}
-        <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
-          let schoolsString = "";
-          sData.filter((obj) => {
-            if (obj.id.substring(3) === selected.toString()) {
-              let i;
-              for (i = 0; i < obj.schools.length; i++) {
-                schoolsString += obj.schools[i].title.toString() + ": $" + schoolsMap.get(obj.schools[i].title.toString()) + '\n';
-              }
-            }
-          });
-          this.setState({
-            visible: true,
-            university: schoolsString,
-          });
-        }} options={statesArray} />
-        <Typeahead id="search-bar" placeholder="search by school" onChange={(selected) => {
-          let schoolGrant;
-          dataObjects.filter((obj) => {
-            if (obj.title === selected.toString()) {
-              schoolGrant = obj.totalGrant;
-              return obj.totalGrant;
-            }
-          });
-          this.setState({
-            visible: true,
-            university: selected,
-            totalGrant: schoolGrant,
-          });
-        }} options={schoolsArray} />
       </div>
     );
   }

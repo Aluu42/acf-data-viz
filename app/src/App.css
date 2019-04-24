@@ -56,8 +56,19 @@
 }
 
 .cityInfo {
-  color: #295b68;
+  color: #264254;
   font-size: 165%;
+}
+
+.container {
+  height: 20%;
+  background-color: #282c34;
+}
+
+.floatleft {
+  float:left; 
+  width: 60%;
+  height: 100%;
 }
 
 /* .map-marker .dot {
