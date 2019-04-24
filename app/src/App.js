@@ -7,6 +7,8 @@ import am4geodata_usaLow from "@amcharts/amcharts4-geodata/usaLow";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import Papa from 'papaparse';
 import zipcodes from 'zipcodes';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import Banner from 'react-js-banner';
 import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
 import { Typeahead } from 'react-bootstrap-typeahead';
@@ -565,10 +567,10 @@ class App extends Component {
     // Set up custom heat map legend labels using axis ranges
     let minRange = heatLegend.valueAxis.axisRanges.create();
     minRange.value = heatLegend.minValue;
-    minRange.label.text = "smallest value";
+    minRange.label.text = "$0";
     let maxRange = heatLegend.valueAxis.axisRanges.create();
     maxRange.value = heatLegend.maxValue;
-    maxRange.label.text = "largest value";
+    maxRange.label.text = "$largest value";
 
     // Blank out internal heat legend value axis labels
     heatLegend.valueAxis.renderer.labels.template.adapter.add("text", function (labelText) {
@@ -590,6 +592,7 @@ class App extends Component {
       // console.log(ev.target);
       let state = ev.target.dataItem.dataContext;
       this.renderState(state);
+      console.log(state);
       this.showSchoolsByState(state.id.substring(3));
       // this.renderChart(state, polygonSeries.data);
     });
@@ -703,7 +706,7 @@ class App extends Component {
 
   renderState = (state) => {
     var chart = am4core.create("chartdiv", am4maps.MapChart);
-
+    console.log(state);
     // Set map definition
     chart.geodata = state.stateMap;
 
@@ -802,23 +805,33 @@ class App extends Component {
   render() {
     let cityInfo;
     if (this.state.visible) {
-      cityInfo = <text>{this.state.university} {this.state.totalGrant}</text>;
+      cityInfo = <Card><text>{this.state.university} {this.state.totalGrant}</text><br /></Card>;
     }
     return (
       <div class="wrap">
         <div class="contents">
           <Banner title="  " css={this.state.bannerCSS} />
           <div class="floatleft">
-            <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
-            {/* <label class="infoText">Click on a state to view more info</label> */}
-            {/* <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div> */}
+            <Card>
+              <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
+              {/* <label class="infoText">Click on a state to view more info</label> */}
+              {/* <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div> */}
+            </Card>
             <div class="searchBars">
               <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
                 if (selected.length === 0) {
                   this.setState({ visible: false, university: "", totalGrant: "" });
                 }
                 else {
-                  this.showSchoolsByState(selected);
+                  // this.showSchoolsByState(selected);
+                  // instead of calling this, create a chart of top 5
+                  
+                  let state = sData.filter((obj) => {
+                    if (obj.id.substring(3) === selected.toString()) {
+                      return obj;                      
+                    }
+                  });
+                  this.renderState(state[0]);
                 }
               }} options={statesArray} />
               <Typeahead id="search-bar" placeholder="search by school" onChange={(selected) => {
@@ -826,7 +839,8 @@ class App extends Component {
                   this.setState({ visible: false, university: "", totalGrant: "" });
                 }
                 else {
-                  this.showSchools(selected);
+                  // this.showSchools(selected);
+                  // instead of calling this, create an info card
                 }
               }} options={schoolsArray} />
             </div>
