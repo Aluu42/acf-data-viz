@@ -590,6 +590,7 @@ class App extends Component {
       // console.log(ev.target);
       let state = ev.target.dataItem.dataContext;
       this.renderState(state);
+      this.showSchoolsByState(state.id.substring(3));
       // this.renderChart(state, polygonSeries.data);
     });
 
@@ -640,8 +641,8 @@ class App extends Component {
       let grant = ev.target.dataItem.dataContext.totalGrant;
       this.setState({
         visible: true,
-        university: school,
-        totalGrant: grant,
+        university: school + ": ",
+        totalGrant: "$" + grant,
       });
     }, this);
 
@@ -743,7 +744,6 @@ class App extends Component {
         return obj;
       }
     });
-    console.log(imageSeries.data);
 
     let circle = imageSeries.mapImages.template.createChild(am4core.Circle);
     circle.radius = 2;
@@ -758,59 +758,81 @@ class App extends Component {
       let grant = ev.target.dataItem.dataContext.totalGrant;
       this.setState({
         visible: true,
-        university: school,
-        totalGrant: grant,
+        university: school + ": ",
+        totalGrant: "$" + grant,
       });
     }, this);
+  }
+
+  showSchools = (selected) => {
+    let schoolGrant;
+    dataObjects.filter((obj) => {
+      if (obj.title === selected.toString()) {
+        schoolGrant = obj.totalGrant;
+        return obj.totalGrant;
+      }
+    });
+    this.setState({
+      visible: true,
+      university: selected + ":",
+      totalGrant: "$" + schoolGrant,
+    });
+  }
+
+  showSchoolsByState = (selected) => {
+    let schoolsString = "";
+    sData.filter((obj) => {
+      if (obj.id.substring(3) === selected.toString()) {
+        let i;
+        for (i = 0; i < obj.schools.length; i++) {
+          let amount = schoolsMap.get(obj.schools[i].title.toString());
+          schoolsString += obj.schools[i].title.toString() + ": $" + amount + '*';
+        }
+        schoolsString = schoolsString.split('*').map(t => {
+          return <div>{t}</div>;
+        });
+      }
+    });
+    this.setState({
+      visible: true,
+      university: schoolsString,
+    });
   }
 
   render() {
     let cityInfo;
     if (this.state.visible) {
-      cityInfo = <text>{this.state.university}: ${this.state.totalGrant}</text>;
+      cityInfo = <text>{this.state.university} {this.state.totalGrant}</text>;
     }
     return (
       <div class="wrap">
         <div class="contents">
-          <Banner title="  " css={this.state.bannerCSS}/>
+          <Banner title="  " css={this.state.bannerCSS} />
           <div class="floatleft">
             <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
-            <div class="cityInfo">
-              {cityInfo}
-            </div>
             {/* <label class="infoText">Click on a state to view more info</label> */}
             {/* <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div> */}
             <div class="searchBars">
               <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
-                let schoolsString = "";
-                sData.filter((obj) => {
-                  if (obj.id.substring(3) === selected.toString()) {
-                    let i;
-                    for (i = 0; i < obj.schools.length; i++) {
-                      schoolsString += obj.schools[i].title.toString() + ": $" + schoolsMap.get(obj.schools[i].title.toString()) + '\n';
-                    }
-                  }
-                });
-                this.setState({
-                  visible: true,
-                  university: schoolsString,
-                });
+                if (selected.length === 0) {
+                  this.setState({ visible: false, university: "", totalGrant: "" });
+                }
+                else {
+                  this.showSchoolsByState(selected);
+                }
               }} options={statesArray} />
               <Typeahead id="search-bar" placeholder="search by school" onChange={(selected) => {
-                let schoolGrant;
-                dataObjects.filter((obj) => {
-                  if (obj.title === selected.toString()) {
-                    schoolGrant = obj.totalGrant;
-                    return obj.totalGrant;
-                  }
-                });
-                this.setState({
-                  visible: true,
-                  university: selected,
-                  totalGrant: schoolGrant,
-                });
+                if (selected.length === 0) {
+                  this.setState({ visible: false, university: "", totalGrant: "" });
+                }
+                else {
+                  this.showSchools(selected);
+                }
               }} options={schoolsArray} />
             </div>
+          </div>
+          <div class="cityInfo floatright">
+            {cityInfo}
           </div>
         </div>
       </div>

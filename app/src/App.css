@@ -60,6 +60,10 @@
   font-size: 165%;
 }
 
+.wrap {
+  width: 100%;
+}
+
 .container {
   height: 20%;
   background-color: #282c34;
@@ -68,6 +72,12 @@
 .floatleft {
   float:left; 
   width: 60%;
+  height: 100%;
+}
+
+.floatright {
+  float:right;
+  width: 40%;
   height: 100%;
 }
 
