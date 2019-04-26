@@ -592,8 +592,8 @@ class App extends Component {
       // console.log(ev.target);
       let state = ev.target.dataItem.dataContext;
       this.renderState(state);
-      console.log(state);
-      this.showSchoolsByState(state.id.substring(3));
+      // console.log(state);
+      // this.showSchoolsByState(state.id.substring(3));
       this.renderChart(state, polygonSeries.data);
     });
 
@@ -659,7 +659,6 @@ class App extends Component {
 
   renderChart = (state, stateData) => {
     console.log(state);
-    // state = state.id.substring(3);
 
     let chart2 = am4core.create("chartdiv2", am4charts.XYChart);
 
@@ -815,7 +814,6 @@ class App extends Component {
             <Card>
               <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
               {/* <label class="infoText">Click on a state to view more info</label> */}
-              <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div>
             </Card>
             <div class="searchBars">
               <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
@@ -846,6 +844,7 @@ class App extends Component {
             </div>
           </div>
           <div class="cityInfo floatright">
+            <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div>
             {cityInfo}
           </div>
         </div>
