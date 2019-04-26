@@ -594,7 +594,7 @@ class App extends Component {
       this.renderState(state);
       console.log(state);
       this.showSchoolsByState(state.id.substring(3));
-      // this.renderChart(state, polygonSeries.data);
+      this.renderChart(state, polygonSeries.data);
     });
 
     let imageSeries = chart.series.push(new am4maps.MapImageSeries());
@@ -658,13 +658,13 @@ class App extends Component {
   }
 
   renderChart = (state, stateData) => {
-    state = state.id.substring(3);
+    console.log(state);
+    // state = state.id.substring(3);
 
     let chart2 = am4core.create("chartdiv2", am4charts.XYChart);
 
     // Add data
-    chart2.data = stateData[4].schools[0];
-    console.log(stateData[4].schools[0]);
+    chart2.data = state.schools;
 
     // Create axes
     let categoryAxis = chart2.xAxes.push(new am4charts.CategoryAxis());
@@ -683,7 +683,7 @@ class App extends Component {
 
     // Create series
     let series = chart2.series.push(new am4charts.ColumnSeries());
-    series.dataFields.valueY = "value";
+    series.dataFields.valueY = "totalGrant";
     series.dataFields.categoryX = "title";
     series.name = "Visits";
     series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
@@ -815,7 +815,7 @@ class App extends Component {
             <Card>
               <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
               {/* <label class="infoText">Click on a state to view more info</label> */}
-              {/* <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div> */}
+              <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div>
             </Card>
             <div class="searchBars">
               <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
