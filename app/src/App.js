@@ -905,6 +905,13 @@ class App extends Component {
                 }
                 else {
                   this.showSchools(selected);
+                  let school = dataObjects.filter((obj) => {
+                    if (obj.title === selected.toString()) {
+                      return obj;
+                    }
+                  });
+                  this.renderSchoolChart(school[0]);
+
                   // instead of calling this, create an info card
                 }
               }} options={schoolsArray} />
