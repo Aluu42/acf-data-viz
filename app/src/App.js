@@ -530,7 +530,7 @@ class App extends Component {
       // sum up the values in each subarray
       let sum = stateArr.reduce((a, b) => a + b.totalGrant, 0);
 
-      // put sum in value of data array 
+      // put sum in value of data array
       polygonSeries.data[i].value = sum;
       statesArray.push(polygonSeries.data[i].id.substring(3));
       let stateString = polygonSeries.data[i].id.substring(3);
@@ -663,8 +663,13 @@ class App extends Component {
 
     let chart2 = am4core.create("chartdiv2", am4charts.XYChart);
 
+    let schoolData = state.schools;
+    schoolData.sort(function(a, b) {
+      return parseInt(b.totalGrant) - parseInt(a.totalGrant);
+    });
     // Add data
-    chart2.data = state.schools;
+    chart2.data = schoolData.slice(0,5);
+
 
     // Create axes
     let categoryAxis = chart2.xAxes.push(new am4charts.CategoryAxis());
@@ -825,10 +830,10 @@ class App extends Component {
                 else {
                   // this.showSchoolsByState(selected);
                   // instead of calling this, create a chart of top 5
-                  
+
                   let state = sData.filter((obj) => {
                     if (obj.id.substring(3) === selected.toString()) {
-                      return obj;                      
+                      return obj;
                     }
                   });
                   this.renderState(state[0]);
