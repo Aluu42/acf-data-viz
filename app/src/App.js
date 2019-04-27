@@ -100,6 +100,7 @@ class App extends Component {
     this.loadData = this.loadData.bind(this);
     this.dataCallback = this.dataCallback.bind(this);
     this.renderChart = this.renderChart.bind(this);
+    this.renderSchoolChart = this.renderSchoolChart.bind(this);
   }
 
   dataCallback = (results, file) => {
@@ -108,7 +109,7 @@ class App extends Component {
     let latitude = results.data[0].Latitude;
     let longitude = results.data[0].Longitude;
     let currState = zipcodes.lookup(results.data[0].PayeeZip).state;
-    let yearByYearGrant = {};
+    let yearByYearGrant = [];
 
     var i = 0;
     while (i < results.data.length) {
@@ -147,7 +148,9 @@ class App extends Component {
         }
 
         totalGrant += grantAmount;
-        yearByYearGrant["20" + results.data[i].GrantDate.substring(results.data[i].GrantDate.length-2)] = grantAmount;
+        var currYear = "20" + results.data[i].GrantDate.substring(results.data[i].GrantDate.length-2);
+        var yearGrant = {year: currYear, grantAmount: grantAmount};
+        yearByYearGrant.push(yearGrant);
         i++;
       }
       else {
@@ -162,7 +165,7 @@ class App extends Component {
           "yearlyList": yearByYearGrant,
         });
         currSchool = results.data[i].Institution;
-        yearByYearGrant = {};
+        yearByYearGrant = [];
         schoolsArray.push(currSchool);
 
         totalGrant = 0;
@@ -653,6 +656,7 @@ class App extends Component {
         university: school + ": ",
         totalGrant: "$" + grant,
       });
+      this.renderSchoolChart(ev.target.dataItem.dataContext);
     }, this);
 
   }
@@ -663,48 +667,46 @@ class App extends Component {
     });
   }
 
-  renderSchoolChart = (school) => {
-    // state = state.id.substring(3);
+    renderSchoolChart = (school) => {
+      // state = state.id.substring(3);
 
-    let chart2 = am4core.create("chartdiv3", am4charts.XYChart);
+      let chart3 = am4core.create("chartdiv3", am4charts.XYChart);
 
-    let schoolData = Object.keys(school.yearlyList);
-    // Add data
-    chart2.data = schoolData;
-
-
-    // Create axes
-    let categoryAxis = chart2.xAxes.push(new am4charts.CategoryAxis());
-    categoryAxis.dataFields.category = "title";
-    categoryAxis.renderer.grid.template.location = 0;
-    categoryAxis.renderer.minGridDistance = 30;
+      // Add data
+      chart3.data = school.yearlyList;
+      console.log(school);
+      // Create axes
+      let categoryAxis = chart3.xAxes.push(new am4charts.CategoryAxis());
+      categoryAxis.dataFields.category = "year";
+      categoryAxis.renderer.grid.template.location = 0;
+      categoryAxis.renderer.minGridDistance = 30;
 
 
-    categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
-      if (target.dataItem && target.dataItem.index & 2 == 2) {
-        return dy + 25;
-      }
-      return dy;
-    });
-    categoryAxis.renderer.labels.template.fontSize = 10;
-    categoryAxis.renderer.labels.template.horizontalCenter = "right";
-    categoryAxis.renderer.labels.template.verticalCenter = "middle";
-    categoryAxis.renderer.labels.template.rotation = 270;
+      categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
+        if (target.dataItem && target.dataItem.index & 2 == 2) {
+          return dy + 25;
+        }
+        return dy;
+      });
+      categoryAxis.renderer.labels.template.fontSize = 10;
+      categoryAxis.renderer.labels.template.horizontalCenter = "right";
+      categoryAxis.renderer.labels.template.verticalCenter = "middle";
+      categoryAxis.renderer.labels.template.rotation = 270;
 
-    let valueAxis = chart2.yAxes.push(new am4charts.ValueAxis());
+      let valueAxis = chart3.yAxes.push(new am4charts.ValueAxis());
 
-    // Create series
-    let series = chart2.series.push(new am4charts.ColumnSeries());
-    series.dataFields.valueY = "totalGrant";
-    series.dataFields.categoryX = "title";
-    series.name = "Visits";
-    series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
-    series.columns.template.fillOpacity = .8;
+      // Create series
+      let series = chart3.series.push(new am4charts.ColumnSeries());
+      series.dataFields.valueY = "grantAmount";
+      series.dataFields.categoryX = "year";
+      series.name = "Year";
+      series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+      series.columns.template.fillOpacity = .8;
 
-    let columnTemplate = series.columns.template;
-    columnTemplate.strokeWidth = 2;
-    columnTemplate.strokeOpacity = 1;
-  }
+      let columnTemplate = series.columns.template;
+      columnTemplate.strokeWidth = 2;
+      columnTemplate.strokeOpacity = 1;
+    }
 
     renderChart = (state, stateData) => {
     console.log(state);
@@ -823,6 +825,7 @@ class App extends Component {
         university: school + ": ",
         totalGrant: "$" + grant,
       });
+      this.renderSchoolChart(ev.target.dataItem.dataContext);
     }, this);
   }
 
@@ -910,6 +913,7 @@ class App extends Component {
           <div class="cityInfo floatright">
             <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div>
             {cityInfo}
+            <div id="chartdiv3" style={{ width: "100%", height: "500px" }}></div>
           </div>
         </div>
       </div>
