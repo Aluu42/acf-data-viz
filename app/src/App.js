@@ -108,14 +108,17 @@ class App extends Component {
     let latitude = results.data[0].Latitude;
     let longitude = results.data[0].Longitude;
     let currState = zipcodes.lookup(results.data[0].PayeeZip).state;
+    let yearByYearGrant = {};
 
     var i = 0;
     while (i < results.data.length) {
+
       let grantAmount = results.data[i].GrantAmt.substring(1);
       grantAmount = grantAmount.replace(',', "");
       grantAmount = parseFloat(grantAmount);
 
       if (currSchool === results.data[i].Institution) {
+
         let currLat = results.data[i].Latitude;
         if (currLat != null) {
           let lat = currLat.substring(0, currLat.length - 2);
@@ -144,6 +147,7 @@ class App extends Component {
         }
 
         totalGrant += grantAmount;
+        yearByYearGrant["20" + results.data[i].GrantDate.substring(results.data[i].GrantDate.length-2)] = grantAmount;
         i++;
       }
       else {
@@ -155,8 +159,10 @@ class App extends Component {
           "longitude": longitude,
           "totalGrant": totalGrant,
           "state": currState,
+          "yearlyList": yearByYearGrant,
         });
         currSchool = results.data[i].Institution;
+        yearByYearGrant = {};
         schoolsArray.push(currSchool);
 
         totalGrant = 0;
@@ -593,7 +599,7 @@ class App extends Component {
       let state = ev.target.dataItem.dataContext;
       this.renderState(state);
       console.log(state);
-      this.showSchoolsByState(state.id.substring(3));
+      //this.showSchoolsByState(state.id.substring(3));
       this.renderChart(state, polygonSeries.data);
     });
 
@@ -657,7 +663,50 @@ class App extends Component {
     });
   }
 
-  renderChart = (state, stateData) => {
+  renderSchoolChart = (school) => {
+    // state = state.id.substring(3);
+
+    let chart2 = am4core.create("chartdiv3", am4charts.XYChart);
+
+    let schoolData = Object.keys(school.yearlyList);
+    // Add data
+    chart2.data = schoolData;
+
+
+    // Create axes
+    let categoryAxis = chart2.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = "title";
+    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.renderer.minGridDistance = 30;
+
+
+    categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
+      if (target.dataItem && target.dataItem.index & 2 == 2) {
+        return dy + 25;
+      }
+      return dy;
+    });
+    categoryAxis.renderer.labels.template.fontSize = 10;
+    categoryAxis.renderer.labels.template.horizontalCenter = "right";
+    categoryAxis.renderer.labels.template.verticalCenter = "middle";
+    categoryAxis.renderer.labels.template.rotation = 270;
+
+    let valueAxis = chart2.yAxes.push(new am4charts.ValueAxis());
+
+    // Create series
+    let series = chart2.series.push(new am4charts.ColumnSeries());
+    series.dataFields.valueY = "totalGrant";
+    series.dataFields.categoryX = "title";
+    series.name = "Visits";
+    series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+    series.columns.template.fillOpacity = .8;
+
+    let columnTemplate = series.columns.template;
+    columnTemplate.strokeWidth = 2;
+    columnTemplate.strokeOpacity = 1;
+  }
+
+    renderChart = (state, stateData) => {
     console.log(state);
     // state = state.id.substring(3);
 
@@ -677,12 +726,17 @@ class App extends Component {
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.minGridDistance = 30;
 
+
     categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
       if (target.dataItem && target.dataItem.index & 2 == 2) {
         return dy + 25;
       }
       return dy;
     });
+    categoryAxis.renderer.labels.template.fontSize = 10;
+    categoryAxis.renderer.labels.template.horizontalCenter = "right";
+    categoryAxis.renderer.labels.template.verticalCenter = "middle";
+    categoryAxis.renderer.labels.template.rotation = 270;
 
     let valueAxis = chart2.yAxes.push(new am4charts.ValueAxis());
 
@@ -774,9 +828,12 @@ class App extends Component {
 
   showSchools = (selected) => {
     let schoolGrant;
+    let yearlyList;
     dataObjects.filter((obj) => {
       if (obj.title === selected.toString()) {
+        console.log(obj)
         schoolGrant = obj.totalGrant;
+        yearlyList = obj.yearlyList;
         return obj.totalGrant;
       }
     });
@@ -815,12 +872,11 @@ class App extends Component {
     return (
       <div class="wrap">
         <div class="contents">
-          <Banner title="  " css={this.state.bannerCSS} />
+        <div id="bannerimage"></div>
           <div class="floatleft">
             <Card>
               <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
               {/* <label class="infoText">Click on a state to view more info</label> */}
-              <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div>
             </Card>
             <div class="searchBars">
               <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
@@ -837,6 +893,7 @@ class App extends Component {
                     }
                   });
                   this.renderState(state[0]);
+                  this.renderChart(state[0], []);
                 }
               }} options={statesArray} />
               <Typeahead id="search-bar" placeholder="search by school" onChange={(selected) => {
@@ -844,13 +901,14 @@ class App extends Component {
                   this.setState({ visible: false, university: "", totalGrant: "" });
                 }
                 else {
-                  // this.showSchools(selected);
+                  this.showSchools(selected);
                   // instead of calling this, create an info card
                 }
               }} options={schoolsArray} />
             </div>
           </div>
           <div class="cityInfo floatright">
+            <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div>
             {cityInfo}
           </div>
         </div>
