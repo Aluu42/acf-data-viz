@@ -85,23 +85,27 @@ const schoolsMap = new Map();
 let sData = [];
 
 am4core.useTheme(am4themes_animated);
-
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+const initialState = {
       visible: false,
       data: null,
       university: "",
       grantamt: "",
       bannerCSS: { color: "#FFF", backgroundColor: "#282c34", fontSize: 500 },
     };
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = initialState;
     this.renderMap = this.renderMap.bind(this);
     this.renderSchoolData = this.renderSchoolData.bind(this);
     this.loadData = this.loadData.bind(this);
     this.dataCallback = this.dataCallback.bind(this);
     this.renderChart = this.renderChart.bind(this);
     this.renderSchoolChart = this.renderSchoolChart.bind(this);
+  }
+
+  resetState=()=>{
+    window.location.reload();
   }
 
   dataCallback = (results, file) => {
@@ -605,7 +609,7 @@ class App extends Component {
       this.renderState(state);
       // console.log(state);
       // this.showSchoolsByState(state.id.substring(3));
-      console.log(state);
+      //console.log(state);
       //this.showSchoolsByState(state.id.substring(3));
       this.renderChart(state, polygonSeries.data);
     });
@@ -645,7 +649,6 @@ class App extends Component {
 
   renderSchoolChart = (school) => {
     // state = state.id.substring(3);
-
     let chart3 = am4core.create("chartdiv3", am4charts.XYChart);
 
     // Add data
@@ -773,7 +776,7 @@ class App extends Component {
     // Configure series
     var polygonTemplate = polygonSeries.mapPolygons.template;
     polygonTemplate.tooltipText = "{name}";
-    polygonTemplate.fill = am4core.color("#264254");
+    polygonTemplate.fill = am4core.color("#476b82");
 
     // Create hover state and set alternative fill color
     var hs = polygonTemplate.states.create("hover");
@@ -913,6 +916,9 @@ class App extends Component {
             <Card>
               <div id="chartdiv3" style={{ width: "100%", height: "500px" }}></div>
             </Card>
+          </div>
+          <div>
+            <button onClick={this.resetState}>reset</button>
           </div>
         </div>
       </div>
