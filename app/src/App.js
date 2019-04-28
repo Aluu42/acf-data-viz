@@ -876,6 +876,9 @@ class App extends Component {
                   {/* <label class="infoText">Click on a state to view more info</label> */}
                 </CardMedia>
               </Card>
+
+              <button onClick={this.resetState}>Return to United States Map</button>
+
             </div>
             <div class="searchBars">
               <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
@@ -916,9 +919,6 @@ class App extends Component {
             <Card>
               <div id="chartdiv3" style={{ width: "100%", height: "500px" }}></div>
             </Card>
-          </div>
-          <div>
-            <button onClick={this.resetState}>reset</button>
           </div>
         </div>
       </div>
