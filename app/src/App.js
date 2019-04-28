@@ -865,8 +865,7 @@ class App extends Component {
     if (this.state.visible) {
       cityInfo = <Card><text>
         <div> {this.state.university} </div>
-        <div> Total Grants: {this.state.totalGrant}</div>
-        Historical Scholarship Graph: </text><br /></Card>;
+        Total Grants: {this.state.totalGrant} </text><br /></Card>;
     }
 
     return (
@@ -874,7 +873,7 @@ class App extends Component {
         <div class="contents">
           <div id="bannerimage"></div>
           <div class="floatleft">
-            <div class="searchBars">
+            <div class="searchBars" style={{marginTop: '3.5%'}} >
               <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
                 if (selected.length === 0) {
                   this.setState({ visible: false, university: "", totalGrant: "" });
@@ -920,14 +919,14 @@ class App extends Component {
           <div class="cityInfo floatright">
             <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
               <Card>
-                <CardHeader title="hello" />
+                <CardHeader title="Top 5 Schools in State" />
                 <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
               </Card>
             </div>
             {cityInfo}
             <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
               <Card>
-                <CardHeader title="hello" />
+                <CardHeader title="School Historical Scholarships" />
                 <div id="chartdiv3" style={{ width: "100%", height: "400px" }}></div>
               </Card>
             </div>
