@@ -869,6 +869,17 @@ class App extends Component {
         <div class="contents">
           <div id="bannerimage"></div>
           <div class="floatleft">
+            <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%'}}>
+              <Card>
+                <CardMedia>
+                  <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
+                  {/* <label class="infoText">Click on a state to view more info</label> */}
+                </CardMedia>
+              </Card>
+
+              <button onClick={this.resetState}>Return to United States Map</button>
+
+            </div>
             <div class="searchBars">
               <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
                 if (selected.length === 0) {
@@ -924,9 +935,6 @@ class App extends Component {
               </Card>
             </div>
 
-          </div>
-          <div>
-            <button onClick={this.resetState}>reset</button>
           </div>
         </div>
       </div>
