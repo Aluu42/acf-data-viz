@@ -750,6 +750,16 @@ class App extends Component {
     series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
     series.columns.template.fillOpacity = .8;
 
+    series.columns.template.events.on("hit", function(ev) {
+      console.log("clicked on ", ev.target._dataItem.categories.categoryX);
+      let school = dataObjects.filter((obj) => {
+      if (obj.title === ev.target._dataItem.categories.categoryX) {
+        return obj;
+      }
+      });
+      this.renderSchoolChart(school[0]);
+      }, this);
+
     let columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
     columnTemplate.strokeOpacity = 1;
@@ -870,8 +880,13 @@ class App extends Component {
   render() {
     let cityInfo;
     if (this.state.visible) {
-      cityInfo = <Card><text>{this.state.university} {this.state.totalGrant}</text><br /></Card>;
+      cityInfo = <Card><text>
+      <div> {this.state.university} </div>
+      <div> Total Grants: {this.state.totalGrant}</div>
+      Historical Scholarship Graph: </text><br /></Card>;
     }
+
+
     return (
       <div class="wrap">
         <div class="contents">
