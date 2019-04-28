@@ -74,6 +74,7 @@ import WA from "@amcharts/amcharts4-geodata/region/usa/waLow";
 import WV from "@amcharts/amcharts4-geodata/region/usa/wvLow";
 import WI from "@amcharts/amcharts4-geodata/region/usa/wiLow";
 import WY from "@amcharts/amcharts4-geodata/region/usa/wyLow";
+import { CardHeader } from '@material-ui/core';
 
 
 var csv = require('./data.csv');
@@ -570,7 +571,7 @@ class App extends Component {
     heatLegend.series = polygonSeries;
     heatLegend.align = "left";
     heatLegend.valign = "top";
-    heatLegend.width = am4core.percent(15);
+    heatLegend.width = am4core.percent(25);
     heatLegend.marginRight = am4core.percent(4);
     heatLegend.minValue = 0;
     heatLegend.maxValue = 40000000;
@@ -724,15 +725,15 @@ class App extends Component {
     series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
     series.columns.template.fillOpacity = .8;
 
-    series.columns.template.events.on("hit", function(ev) {
+    series.columns.template.events.on("hit", function (ev) {
       console.log("clicked on ", ev.target._dataItem.categories.categoryX);
       let school = dataObjects.filter((obj) => {
-      if (obj.title === ev.target._dataItem.categories.categoryX) {
-        return obj;
-      }
+        if (obj.title === ev.target._dataItem.categories.categoryX) {
+          return obj;
+        }
       });
       this.renderSchoolChart(school[0]);
-      }, this);
+    }, this);
 
     let columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
@@ -773,11 +774,11 @@ class App extends Component {
     // Configure series
     var polygonTemplate = polygonSeries.mapPolygons.template;
     polygonTemplate.tooltipText = "{name}";
-    polygonTemplate.fill = am4core.color("#264254");
+    polygonTemplate.fill = am4core.color("#64B5F6");
 
     // Create hover state and set alternative fill color
     var hs = polygonTemplate.states.create("hover");
-    hs.properties.fill = am4core.color("#3c5bdc");
+    hs.properties.fill = am4core.color("#455890");
 
     polygonTemplate.events.on("hit", (ev) => {
       ev.target.series.chart.zoomToMapObject(ev.target);
@@ -855,25 +856,16 @@ class App extends Component {
     let cityInfo;
     if (this.state.visible) {
       cityInfo = <Card><text>
-      <div> {this.state.university} </div>
-      <div> Total Grants: {this.state.totalGrant}</div>
-      Historical Scholarship Graph: </text><br /></Card>;
+        <div> {this.state.university} </div>
+        <div> Total Grants: {this.state.totalGrant}</div>
+        Historical Scholarship Graph: </text><br /></Card>;
     }
-
-
+    
     return (
       <div class="wrap">
         <div class="contents">
           <div id="bannerimage"></div>
           <div class="floatleft">
-            <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%'}}>
-              <Card>
-                <CardMedia>
-                  <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
-                  {/* <label class="infoText">Click on a state to view more info</label> */}
-                </CardMedia>
-              </Card>
-            </div>
             <div class="searchBars">
               <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
                 if (selected.length === 0) {
@@ -904,15 +896,31 @@ class App extends Component {
                 }
               }} options={schoolsArray} />
             </div>
+            <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
+              <Card>
+                <CardHeader title="Click on a state or school for more info"/>
+                <CardMedia>
+                  <div id="chartdiv" style={{ width: "100%", height: "400px" }}></div>
+                  {/* <label class="infoText">Click on a state to view more info</label> */}
+                </CardMedia>
+              </Card>
+            </div>
           </div>
           <div class="cityInfo floatright">
-            <Card>
-              <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div>
-            </Card>
+            <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
+              <Card>
+                <CardHeader title="hello"/>
+                <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
+              </Card>
+            </div>
             {cityInfo}
-            <Card>
-              <div id="chartdiv3" style={{ width: "100%", height: "500px" }}></div>
-            </Card>
+            <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
+              <Card>
+                <CardHeader title="hello"/>
+                <div id="chartdiv3" style={{ width: "100%", height: "400px" }}></div>
+              </Card>
+            </div>
+
           </div>
         </div>
       </div>
