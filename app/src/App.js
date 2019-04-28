@@ -668,10 +668,10 @@ class App extends Component {
       }
       return dy;
     });
-    categoryAxis.renderer.labels.template.fontSize = 10;
-    categoryAxis.renderer.labels.template.horizontalCenter = "right";
-    categoryAxis.renderer.labels.template.verticalCenter = "middle";
-    categoryAxis.renderer.labels.template.rotation = 270;
+    categoryAxis.renderer.labels.template.fontSize = 15;
+    // categoryAxis.renderer.labels.template.horizontalCenter = "right";
+    // categoryAxis.renderer.labels.template.verticalCenter = "middle";
+    // categoryAxis.renderer.labels.template.rotation = 270;
 
     let valueAxis = chart3.yAxes.push(new am4charts.ValueAxis());
 
@@ -714,9 +714,11 @@ class App extends Component {
       return dy;
     });
     categoryAxis.renderer.labels.template.fontSize = 10;
-    categoryAxis.renderer.labels.template.horizontalCenter = "right";
-    categoryAxis.renderer.labels.template.verticalCenter = "middle";
-    categoryAxis.renderer.labels.template.rotation = 270;
+    //categoryAxis.renderer.labels.template.horizontalCenter = "right";
+    //categoryAxis.renderer.labels.template.verticalCenter = "middle";
+    categoryAxis.renderer.labels.template.wrap = true;
+    categoryAxis.renderer.labels.template.maxWidth = 75;
+    //categoryAxis.renderer.labels.template.rotation = 270;
 
     let valueAxis = chart2.yAxes.push(new am4charts.ValueAxis());
 
