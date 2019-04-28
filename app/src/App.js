@@ -9,6 +9,7 @@ import Papa from 'papaparse';
 import zipcodes from 'zipcodes';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 import Banner from 'react-js-banner';
 import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
 import { Typeahead } from 'react-bootstrap-typeahead';
@@ -148,8 +149,8 @@ class App extends Component {
         }
 
         totalGrant += grantAmount;
-        var currYear = "20" + results.data[i].GrantDate.substring(results.data[i].GrantDate.length-2);
-        var yearGrant = {year: currYear, grantAmount: grantAmount};
+        var currYear = "20" + results.data[i].GrantDate.substring(results.data[i].GrantDate.length - 2);
+        var yearGrant = { year: currYear, grantAmount: grantAmount };
         yearByYearGrant.push(yearGrant);
         i++;
       }
@@ -211,6 +212,7 @@ class App extends Component {
 
     chart.zoomControl = new am4maps.ZoomControl();
     chart.zoomControl.align = "left";
+    chart.centerMap = true;
 
     // Create map polygon series
     let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
@@ -566,8 +568,8 @@ class App extends Component {
     // Set up heat legend
     let heatLegend = chart.createChild(am4maps.HeatLegend);
     heatLegend.series = polygonSeries;
-    heatLegend.align = "right";
-    heatLegend.valign = "bottom";
+    heatLegend.align = "left";
+    heatLegend.valign = "top";
     heatLegend.width = am4core.percent(15);
     heatLegend.marginRight = am4core.percent(4);
     heatLegend.minValue = 0;
@@ -613,35 +615,7 @@ class App extends Component {
     imageSeries.mapImages.template.propertyFields.latitude = "latitude";
     imageSeries.mapImages.template.propertyFields.value = "value";
     imageSeries.data = this.state.data;
-    // imageSeries.data = [
-    //   {
-    //     "zoomLevel": 5,
-    //     "scale": 0.5,
-    //     "title": "San Antonio",
-    //     "latitude": 29.4241,
-    //     "longitude": -98.4936,
-    //     "value": 100,
-    //     "state": "Texas",
-    //   },
-    //   {
-    //     "zoomLevel": 5,
-    //     "scale": 0.5,
-    //     "title": "Austin",
-    //     "latitude": 30.2672,
-    //     "longitude": -97.7431,
-    //     "value": 10000,
-    //     "state": "Texas",
-    //   },
-    //   {
-    //     "zoomLevel": 5,
-    //     "scale": 0.5,
-    //     "title": "San Francisco",
-    //     "latitude": 37.7749,
-    //     "longitude": -122.4194,
-    //     "value": 4000,
-    //     "state": "California",
-    //   },
-    // ];
+
     let circle = imageSeries.mapImages.template.createChild(am4core.Circle);
     circle.radius = 2;
     circle.fill = am4core.color("#000000");
@@ -669,58 +643,58 @@ class App extends Component {
     });
   }
 
-    renderSchoolChart = (school) => {
-      // state = state.id.substring(3);
+  renderSchoolChart = (school) => {
+    // state = state.id.substring(3);
 
-      let chart3 = am4core.create("chartdiv3", am4charts.XYChart);
+    let chart3 = am4core.create("chartdiv3", am4charts.XYChart);
 
-      // Add data
-      chart3.data = school.yearlyList;
-      console.log(school);
-      // Create axes
-      let categoryAxis = chart3.xAxes.push(new am4charts.CategoryAxis());
-      categoryAxis.dataFields.category = "year";
-      categoryAxis.renderer.grid.template.location = 0;
-      categoryAxis.renderer.minGridDistance = 30;
+    // Add data
+    chart3.data = school.yearlyList;
+    console.log(school);
+    // Create axes
+    let categoryAxis = chart3.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = "year";
+    categoryAxis.renderer.grid.template.location = 0;
+    categoryAxis.renderer.minGridDistance = 30;
 
 
-      categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
-        if (target.dataItem && target.dataItem.index & 2 == 2) {
-          return dy + 25;
-        }
-        return dy;
-      });
-      categoryAxis.renderer.labels.template.fontSize = 10;
-      categoryAxis.renderer.labels.template.horizontalCenter = "right";
-      categoryAxis.renderer.labels.template.verticalCenter = "middle";
-      categoryAxis.renderer.labels.template.rotation = 270;
+    categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
+      if (target.dataItem && target.dataItem.index & 2 == 2) {
+        return dy + 25;
+      }
+      return dy;
+    });
+    categoryAxis.renderer.labels.template.fontSize = 10;
+    categoryAxis.renderer.labels.template.horizontalCenter = "right";
+    categoryAxis.renderer.labels.template.verticalCenter = "middle";
+    categoryAxis.renderer.labels.template.rotation = 270;
 
-      let valueAxis = chart3.yAxes.push(new am4charts.ValueAxis());
+    let valueAxis = chart3.yAxes.push(new am4charts.ValueAxis());
 
-      // Create series
-      let series = chart3.series.push(new am4charts.ColumnSeries());
-      series.dataFields.valueY = "grantAmount";
-      series.dataFields.categoryX = "year";
-      series.name = "Year";
-      series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
-      series.columns.template.fillOpacity = .8;
+    // Create series
+    let series = chart3.series.push(new am4charts.ColumnSeries());
+    series.dataFields.valueY = "grantAmount";
+    series.dataFields.categoryX = "year";
+    series.name = "Year";
+    series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+    series.columns.template.fillOpacity = .8;
 
-      let columnTemplate = series.columns.template;
-      columnTemplate.strokeWidth = 2;
-      columnTemplate.strokeOpacity = 1;
-    }
+    let columnTemplate = series.columns.template;
+    columnTemplate.strokeWidth = 2;
+    columnTemplate.strokeOpacity = 1;
+  }
 
-    renderChart = (state, stateData) => {
+  renderChart = (state, stateData) => {
     console.log(state);
 
     let chart2 = am4core.create("chartdiv2", am4charts.XYChart);
 
     let schoolData = state.schools;
-    schoolData.sort(function(a, b) {
+    schoolData.sort(function (a, b) {
       return parseInt(b.totalGrant) - parseInt(a.totalGrant);
     });
     // Add data
-    chart2.data = schoolData.slice(0,5);
+    chart2.data = schoolData.slice(0, 5);
 
     // Create axes
     let categoryAxis = chart2.xAxes.push(new am4charts.CategoryAxis());
@@ -875,21 +849,22 @@ class App extends Component {
     return (
       <div class="wrap">
         <div class="contents">
-        <div id="bannerimage"></div>
+          <div id="bannerimage"></div>
           <div class="floatleft">
-            <Card>
-              <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
-              {/* <label class="infoText">Click on a state to view more info</label> */}
-            </Card>
+            <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%'}}>
+              <Card>
+                <CardMedia>
+                  <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
+                  {/* <label class="infoText">Click on a state to view more info</label> */}
+                </CardMedia>
+              </Card>
+            </div>
             <div class="searchBars">
               <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
                 if (selected.length === 0) {
                   this.setState({ visible: false, university: "", totalGrant: "" });
                 }
                 else {
-                  // this.showSchoolsByState(selected);
-                  // instead of calling this, create a chart of top 5
-
                   let state = sData.filter((obj) => {
                     if (obj.id.substring(3) === selected.toString()) {
                       return obj;
@@ -911,16 +886,18 @@ class App extends Component {
                     }
                   });
                   this.renderSchoolChart(school[0]);
-
-                  // instead of calling this, create an info card
                 }
               }} options={schoolsArray} />
             </div>
           </div>
           <div class="cityInfo floatright">
-            <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div>
+            <Card>
+              <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div>
+            </Card>
             {cityInfo}
-            <div id="chartdiv3" style={{ width: "100%", height: "500px" }}></div>
+            <Card>
+              <div id="chartdiv3" style={{ width: "100%", height: "500px" }}></div>
+            </Card>
           </div>
         </div>
       </div>
