@@ -87,12 +87,12 @@ let sData = [];
 
 am4core.useTheme(am4themes_animated);
 const initialState = {
-      visible: false,
-      data: null,
-      university: "",
-      grantamt: "",
-      bannerCSS: { color: "#FFF", backgroundColor: "#282c34", fontSize: 500 },
-    };
+  visible: false,
+  data: null,
+  university: "",
+  grantamt: "",
+  bannerCSS: { color: "#FFF", backgroundColor: "#282c34", fontSize: 500 },
+};
 class App extends Component {
   constructor(props) {
     super(props);
@@ -105,7 +105,7 @@ class App extends Component {
     this.renderSchoolChart = this.renderSchoolChart.bind(this);
   }
 
-  resetState=()=>{
+  resetState = () => {
     window.location.reload();
   }
 
@@ -863,23 +863,12 @@ class App extends Component {
         <div> Total Grants: {this.state.totalGrant}</div>
         Historical Scholarship Graph: </text><br /></Card>;
     }
-    
+
     return (
       <div class="wrap">
         <div class="contents">
           <div id="bannerimage"></div>
           <div class="floatleft">
-            <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%'}}>
-              <Card>
-                <CardMedia>
-                  <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
-                  {/* <label class="infoText">Click on a state to view more info</label> */}
-                </CardMedia>
-              </Card>
-
-              <button onClick={this.resetState}>Return to United States Map</button>
-
-            </div>
             <div class="searchBars">
               <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
                 if (selected.length === 0) {
@@ -912,25 +901,28 @@ class App extends Component {
             </div>
             <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
               <Card>
-                <CardHeader title="Click on a state or school for more info"/>
+              <CardHeader title="Click on a state or school for more info" />
                 <CardMedia>
                   <div id="chartdiv" style={{ width: "100%", height: "400px" }}></div>
                   {/* <label class="infoText">Click on a state to view more info</label> */}
                 </CardMedia>
               </Card>
-            </div>
+
+              <button onClick={this.resetState}>Return to United States Map</button>
+
+            </div>            
           </div>
           <div class="cityInfo floatright">
             <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
               <Card>
-                <CardHeader title="hello"/>
+                <CardHeader title="hello" />
                 <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
               </Card>
             </div>
             {cityInfo}
             <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
               <Card>
-                <CardHeader title="hello"/>
+                <CardHeader title="hello" />
                 <div id="chartdiv3" style={{ width: "100%", height: "400px" }}></div>
               </Card>
             </div>
