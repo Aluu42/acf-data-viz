@@ -735,6 +735,11 @@ class App extends Component {
           return obj;
         }
       });
+      this.setState({
+        visible: true,
+        university: school[0].title + ":",
+        totalGrant: "$" + school[0].totalGrant,
+      });
       this.renderSchoolChart(school[0]);
     }, this);
 
@@ -910,7 +915,7 @@ class App extends Component {
 
               <button onClick={this.resetState}>Return to United States Map</button>
 
-            </div>            
+            </div>
           </div>
           <div class="cityInfo floatright">
             <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
