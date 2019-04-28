@@ -100,6 +100,7 @@ class App extends Component {
     this.loadData = this.loadData.bind(this);
     this.dataCallback = this.dataCallback.bind(this);
     this.renderChart = this.renderChart.bind(this);
+    this.renderSchoolChart = this.renderSchoolChart.bind(this);
   }
 
   dataCallback = (results, file) => {
@@ -108,14 +109,17 @@ class App extends Component {
     let latitude = results.data[0].Latitude;
     let longitude = results.data[0].Longitude;
     let currState = zipcodes.lookup(results.data[0].PayeeZip).state;
+    let yearByYearGrant = [];
 
     var i = 0;
     while (i < results.data.length) {
+
       let grantAmount = results.data[i].GrantAmt.substring(1);
       grantAmount = grantAmount.replace(',', "");
       grantAmount = parseFloat(grantAmount);
 
       if (currSchool === results.data[i].Institution) {
+
         let currLat = results.data[i].Latitude;
         if (currLat != null) {
           let lat = currLat.substring(0, currLat.length - 2);
@@ -144,6 +148,9 @@ class App extends Component {
         }
 
         totalGrant += grantAmount;
+        var currYear = "20" + results.data[i].GrantDate.substring(results.data[i].GrantDate.length-2);
+        var yearGrant = {year: currYear, grantAmount: grantAmount};
+        yearByYearGrant.push(yearGrant);
         i++;
       }
       else {
@@ -155,8 +162,10 @@ class App extends Component {
           "longitude": longitude,
           "totalGrant": totalGrant,
           "state": currState,
+          "yearlyList": yearByYearGrant,
         });
         currSchool = results.data[i].Institution;
+        yearByYearGrant = [];
         schoolsArray.push(currSchool);
 
         totalGrant = 0;
@@ -530,7 +539,7 @@ class App extends Component {
       // sum up the values in each subarray
       let sum = stateArr.reduce((a, b) => a + b.totalGrant, 0);
 
-      // put sum in value of data array 
+      // put sum in value of data array
       polygonSeries.data[i].value = sum;
       statesArray.push(polygonSeries.data[i].id.substring(3));
       let stateString = polygonSeries.data[i].id.substring(3);
@@ -570,7 +579,7 @@ class App extends Component {
     minRange.label.text = "$0";
     let maxRange = heatLegend.valueAxis.axisRanges.create();
     maxRange.value = heatLegend.maxValue;
-    maxRange.label.text = "$largest value";
+    maxRange.label.text = "$4 million";
 
     // Blank out internal heat legend value axis labels
     heatLegend.valueAxis.renderer.labels.template.adapter.add("text", function (labelText) {
@@ -594,6 +603,8 @@ class App extends Component {
       this.renderState(state);
       // console.log(state);
       // this.showSchoolsByState(state.id.substring(3));
+      console.log(state);
+      //this.showSchoolsByState(state.id.substring(3));
       this.renderChart(state, polygonSeries.data);
     });
 
@@ -647,6 +658,7 @@ class App extends Component {
         university: school + ": ",
         totalGrant: "$" + grant,
       });
+      this.renderSchoolChart(ev.target.dataItem.dataContext);
     }, this);
 
   }
@@ -657,13 +669,58 @@ class App extends Component {
     });
   }
 
-  renderChart = (state, stateData) => {
+    renderSchoolChart = (school) => {
+      // state = state.id.substring(3);
+
+      let chart3 = am4core.create("chartdiv3", am4charts.XYChart);
+
+      // Add data
+      chart3.data = school.yearlyList;
+      console.log(school);
+      // Create axes
+      let categoryAxis = chart3.xAxes.push(new am4charts.CategoryAxis());
+      categoryAxis.dataFields.category = "year";
+      categoryAxis.renderer.grid.template.location = 0;
+      categoryAxis.renderer.minGridDistance = 30;
+
+
+      categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
+        if (target.dataItem && target.dataItem.index & 2 == 2) {
+          return dy + 25;
+        }
+        return dy;
+      });
+      categoryAxis.renderer.labels.template.fontSize = 10;
+      categoryAxis.renderer.labels.template.horizontalCenter = "right";
+      categoryAxis.renderer.labels.template.verticalCenter = "middle";
+      categoryAxis.renderer.labels.template.rotation = 270;
+
+      let valueAxis = chart3.yAxes.push(new am4charts.ValueAxis());
+
+      // Create series
+      let series = chart3.series.push(new am4charts.ColumnSeries());
+      series.dataFields.valueY = "grantAmount";
+      series.dataFields.categoryX = "year";
+      series.name = "Year";
+      series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+      series.columns.template.fillOpacity = .8;
+
+      let columnTemplate = series.columns.template;
+      columnTemplate.strokeWidth = 2;
+      columnTemplate.strokeOpacity = 1;
+    }
+
+    renderChart = (state, stateData) => {
     console.log(state);
 
     let chart2 = am4core.create("chartdiv2", am4charts.XYChart);
 
+    let schoolData = state.schools;
+    schoolData.sort(function(a, b) {
+      return parseInt(b.totalGrant) - parseInt(a.totalGrant);
+    });
     // Add data
-    chart2.data = state.schools;
+    chart2.data = schoolData.slice(0,5);
 
     // Create axes
     let categoryAxis = chart2.xAxes.push(new am4charts.CategoryAxis());
@@ -671,12 +728,17 @@ class App extends Component {
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.minGridDistance = 30;
 
+
     categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
       if (target.dataItem && target.dataItem.index & 2 == 2) {
         return dy + 25;
       }
       return dy;
     });
+    categoryAxis.renderer.labels.template.fontSize = 10;
+    categoryAxis.renderer.labels.template.horizontalCenter = "right";
+    categoryAxis.renderer.labels.template.verticalCenter = "middle";
+    categoryAxis.renderer.labels.template.rotation = 270;
 
     let valueAxis = chart2.yAxes.push(new am4charts.ValueAxis());
 
@@ -727,11 +789,11 @@ class App extends Component {
     // Configure series
     var polygonTemplate = polygonSeries.mapPolygons.template;
     polygonTemplate.tooltipText = "{name}";
-    polygonTemplate.fill = am4core.color("#74B266");
+    polygonTemplate.fill = am4core.color("#264254");
 
     // Create hover state and set alternative fill color
     var hs = polygonTemplate.states.create("hover");
-    hs.properties.fill = am4core.color("#367B25");
+    hs.properties.fill = am4core.color("#3c5bdc");
 
     polygonTemplate.events.on("hit", (ev) => {
       ev.target.series.chart.zoomToMapObject(ev.target);
@@ -763,14 +825,18 @@ class App extends Component {
         university: school + ": ",
         totalGrant: "$" + grant,
       });
+      this.renderSchoolChart(ev.target.dataItem.dataContext);
     }, this);
   }
 
   showSchools = (selected) => {
     let schoolGrant;
+    let yearlyList;
     dataObjects.filter((obj) => {
       if (obj.title === selected.toString()) {
+        console.log(obj)
         schoolGrant = obj.totalGrant;
+        yearlyList = obj.yearlyList;
         return obj.totalGrant;
       }
     });
@@ -809,7 +875,7 @@ class App extends Component {
     return (
       <div class="wrap">
         <div class="contents">
-          <Banner title="  " css={this.state.bannerCSS} />
+        <div id="bannerimage"></div>
           <div class="floatleft">
             <Card>
               <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
@@ -823,13 +889,14 @@ class App extends Component {
                 else {
                   // this.showSchoolsByState(selected);
                   // instead of calling this, create a chart of top 5
-                  
+
                   let state = sData.filter((obj) => {
                     if (obj.id.substring(3) === selected.toString()) {
-                      return obj;                      
+                      return obj;
                     }
                   });
                   this.renderState(state[0]);
+                  this.renderChart(state[0], []);
                 }
               }} options={statesArray} />
               <Typeahead id="search-bar" placeholder="search by school" onChange={(selected) => {
@@ -837,7 +904,14 @@ class App extends Component {
                   this.setState({ visible: false, university: "", totalGrant: "" });
                 }
                 else {
-                  // this.showSchools(selected);
+                  this.showSchools(selected);
+                  let school = dataObjects.filter((obj) => {
+                    if (obj.title === selected.toString()) {
+                      return obj;
+                    }
+                  });
+                  this.renderSchoolChart(school[0]);
+
                   // instead of calling this, create an info card
                 }
               }} options={schoolsArray} />
@@ -846,6 +920,7 @@ class App extends Component {
           <div class="cityInfo floatright">
             <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div>
             {cityInfo}
+            <div id="chartdiv3" style={{ width: "100%", height: "500px" }}></div>
           </div>
         </div>
       </div>
