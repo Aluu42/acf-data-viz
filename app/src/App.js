@@ -159,12 +159,13 @@ class App extends Component {
         var currYear = "20" + results.data[i].GrantDate.substring(results.data[i].GrantDate.length - 2);
         for(j = 0; j < yearByYearGrant.length; j++){
           if(yearByYearGrant[j].year == currYear){
+            yearByYearGrant[j].total += 1;
             yearByYearGrant[j].grantAmount += grantAmount;
             exists = true;
           }
         }
         if(!exists){
-          var yearGrant = { year: currYear, grantAmount: grantAmount };
+          var yearGrant = { year: currYear, total: 1, grantAmount: grantAmount };
           yearByYearGrant.push(yearGrant);
         }
 
@@ -912,8 +913,9 @@ class App extends Component {
                 </CardMedia>
               </Card>
 
-              <button onClick={this.resetState}>Return to United States Map</button>
-
+              <div style={{marginTop: '5%'}}>
+                <button type="button" class="btn btn-dark" onClick={this.resetState}>Return to United States Map</button>
+              </div>
             </div>
           </div>
           <div class="cityInfo floatright">
