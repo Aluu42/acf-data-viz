@@ -154,9 +154,20 @@ class App extends Component {
         }
 
         totalGrant += grantAmount;
+        var exists = false;
+        var j;
         var currYear = "20" + results.data[i].GrantDate.substring(results.data[i].GrantDate.length - 2);
-        var yearGrant = { year: currYear, grantAmount: grantAmount };
-        yearByYearGrant.push(yearGrant);
+        for(j = 0; j < yearByYearGrant.length; j++){
+          if(yearByYearGrant[j].year == currYear){
+            yearByYearGrant[j].grantAmount += grantAmount;
+            exists = true;
+          }
+        }
+        if(!exists){
+          var yearGrant = { year: currYear, grantAmount: grantAmount };
+          yearByYearGrant.push(yearGrant);
+        }
+
         i++;
       }
       else {
@@ -171,9 +182,8 @@ class App extends Component {
           "yearlyList": yearByYearGrant,
         });
         currSchool = results.data[i].Institution;
-        yearByYearGrant = [];
         schoolsArray.push(currSchool);
-
+        yearByYearGrant = [];
         totalGrant = 0;
       }
     }
@@ -654,34 +664,28 @@ class App extends Component {
 
     // Add data
     chart3.data = school.yearlyList;
-    console.log(school);
     // Create axes
     let categoryAxis = chart3.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "year";
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.minGridDistance = 30;
 
-
-    categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
-      if (target.dataItem && target.dataItem.index & 2 == 2) {
-        return dy + 25;
-      }
-      return dy;
-    });
-    categoryAxis.renderer.labels.template.fontSize = 15;
+    categoryAxis.renderer.labels.template.fontSize = 10;
     // categoryAxis.renderer.labels.template.horizontalCenter = "right";
     // categoryAxis.renderer.labels.template.verticalCenter = "middle";
     // categoryAxis.renderer.labels.template.rotation = 270;
 
     let valueAxis = chart3.yAxes.push(new am4charts.ValueAxis());
-
+    valueAxis.calculateTotals = true;
     // Create series
     let series = chart3.series.push(new am4charts.ColumnSeries());
     series.dataFields.valueY = "grantAmount";
     series.dataFields.categoryX = "year";
     series.name = "Year";
-    series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+    series.stacked = true;
+    series.columns.template.tooltipText = "{categoryX}: [bold]{valueY.total}[/]";
     series.columns.template.fillOpacity = .8;
+
 
     let columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
@@ -707,12 +711,7 @@ class App extends Component {
     categoryAxis.renderer.minGridDistance = 30;
 
 
-    categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
-      if (target.dataItem && target.dataItem.index & 2 == 2) {
-        return dy + 25;
-      }
-      return dy;
-    });
+
     categoryAxis.renderer.labels.template.fontSize = 10;
     //categoryAxis.renderer.labels.template.horizontalCenter = "right";
     //categoryAxis.renderer.labels.template.verticalCenter = "middle";
@@ -721,7 +720,6 @@ class App extends Component {
     //categoryAxis.renderer.labels.template.rotation = 270;
 
     let valueAxis = chart2.yAxes.push(new am4charts.ValueAxis());
-
     // Create series
     let series = chart2.series.push(new am4charts.ColumnSeries());
     series.dataFields.valueY = "totalGrant";
@@ -829,7 +827,6 @@ class App extends Component {
     let yearlyList;
     dataObjects.filter((obj) => {
       if (obj.title === selected.toString()) {
-        console.log(obj)
         schoolGrant = obj.totalGrant;
         yearlyList = obj.yearlyList;
         return obj.totalGrant;
@@ -866,8 +863,8 @@ class App extends Component {
     let cityInfo;
     if (this.state.visible) {
       cityInfo = <Card><text>
-        <div> {this.state.university} </div>
-        Total Grants: {this.state.totalGrant} </text><br /></Card>;
+        <div>  {this.state.university} </div>
+         Total Grants: {this.state.totalGrant} </text><br /></Card>;
     }
 
     return (
@@ -875,7 +872,7 @@ class App extends Component {
         <div class="contents">
           <div id="bannerimage"></div>
           <div class="floatleft">
-            <div class="searchBars" style={{marginTop: '3.5%'}} >
+            <div class="searchBars" style={{marginLeft: '5%', marginRight: '5%',marginTop: '3.5%'}} >
               <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
                 if (selected.length === 0) {
                   this.setState({ visible: false, university: "", totalGrant: "" });
@@ -901,6 +898,7 @@ class App extends Component {
                       return obj;
                     }
                   });
+                  console.log(school[0]);
                   this.renderSchoolChart(school[0]);
                 }
               }} options={schoolsArray} />
@@ -925,7 +923,9 @@ class App extends Component {
                 <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
               </Card>
             </div>
+            <div style={{marginLeft: '5%', marginRight: '5%'}}>
             {cityInfo}
+            </div>
             <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
               <Card>
                 <CardHeader title="School Historical Scholarships" />
