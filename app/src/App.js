@@ -106,7 +106,7 @@ class App extends Component {
   }
 
   resetState = () => {
-    // window.location.reload();
+    statesArray = Array.from(new Set(statesArray));
     this.renderMap();
   }
 
@@ -217,8 +217,6 @@ class App extends Component {
     // Themes begin
     am4core.useTheme(am4themes_animated);
     // Themes end
-
-    statesArray = [];
 
     // Create map instance
     let chart = am4core.create("chartdiv", am4maps.MapChart);
@@ -575,6 +573,7 @@ class App extends Component {
       }
     }
     sData = polygonSeries.data;
+    statesArray = Array.from(new Set(statesArray));
 
     polygonSeries.heatRules.push({
       property: "fill",
@@ -881,7 +880,7 @@ class App extends Component {
         <div class="contents">
           <div id="bannerimage"></div>
           <div class="floatleft">
-            <div class="searchBars" style={{marginLeft: '5%', marginRight: '5%',marginTop: '3.5%'}} >
+            <div class="searchBars" style={{marginLeft: '5%', marginRight: '5%', marginTop: '0%'}} >
               <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
                 if (selected.length === 0) {
                   this.setState({ visible: false, university: "", totalGrant: "" });
@@ -913,7 +912,7 @@ class App extends Component {
               }} options={schoolsArray} />
             </div>
 
-            <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '0%' }}>
+            <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '0%', marginBottom: '0%' }}>
               <Card>
               <label class="cardHeader">Click on a state or school for more info</label>
               {/* <CardHeader title="Click on a state or school for more info" /> */}
