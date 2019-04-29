@@ -106,7 +106,8 @@ class App extends Component {
   }
 
   resetState = () => {
-    window.location.reload();
+    // window.location.reload();
+    this.renderMap();
   }
 
   dataCallback = (results, file) => {
@@ -216,6 +217,8 @@ class App extends Component {
     // Themes begin
     am4core.useTheme(am4themes_animated);
     // Themes end
+
+    statesArray = [];
 
     // Create map instance
     let chart = am4core.create("chartdiv", am4maps.MapChart);
@@ -560,6 +563,7 @@ class App extends Component {
       // put sum in value of data array
       polygonSeries.data[i].value = sum;
       statesArray.push(polygonSeries.data[i].id.substring(3));
+      
       let stateString = polygonSeries.data[i].id.substring(3);
       statesMap.set(stateString, sum);
 
@@ -823,6 +827,7 @@ class App extends Component {
       });
       this.renderSchoolChart(ev.target.dataItem.dataContext);
     }, this);
+
   }
 
   showSchools = (selected) => {
