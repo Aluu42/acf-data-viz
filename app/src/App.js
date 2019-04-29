@@ -74,7 +74,6 @@ import WA from "@amcharts/amcharts4-geodata/region/usa/waLow";
 import WV from "@amcharts/amcharts4-geodata/region/usa/wvLow";
 import WI from "@amcharts/amcharts4-geodata/region/usa/wiLow";
 import WY from "@amcharts/amcharts4-geodata/region/usa/wyLow";
-import { CardHeader } from '@material-ui/core';
 
 
 var csv = require('./data.csv');
@@ -160,12 +159,13 @@ class App extends Component {
         var currYear = "20" + results.data[i].GrantDate.substring(results.data[i].GrantDate.length - 2);
         for(j = 0; j < yearByYearGrant.length; j++){
           if(yearByYearGrant[j].year == currYear){
+            yearByYearGrant[j].total += 1;
             yearByYearGrant[j].grantAmount += grantAmount;
             exists = true;
           }
         }
         if(!exists){
-          var yearGrant = { year: currYear, grantAmount: grantAmount };
+          var yearGrant = { year: currYear, total: 1, grantAmount: grantAmount };
           yearByYearGrant.push(yearGrant);
         }
 
@@ -585,6 +585,7 @@ class App extends Component {
     let heatLegend = chart.createChild(am4maps.HeatLegend);
     heatLegend.series = polygonSeries;
     heatLegend.align = "left";
+    heatLegend.dx = 25;
     heatLegend.valign = "top";
     heatLegend.width = am4core.percent(25);
     heatLegend.marginRight = am4core.percent(4);
@@ -907,7 +908,7 @@ class App extends Component {
               }} options={schoolsArray} />
             </div>
 
-            <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
+            <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '0%' }}>
               <Card>
               <label class="cardHeader">Click on a state or school for more info</label>
               {/* <CardHeader title="Click on a state or school for more info" /> */}
@@ -916,9 +917,13 @@ class App extends Component {
                   {/* <label class="infoText">Click on a state to view more info</label> */}
                 </CardMedia>
               </Card>
-              <button onClick={this.resetState}>Return to United States Map</button>
+
+              <div style={{marginTop: '1%'}}>
+                <button type="button" class="btn btn-dark" onClick={this.resetState}>Return to United States Map</button>
+              </div>
             </div>
           </div>
+
           <div class="cityInfo floatright">
             <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
               <Card>
