@@ -89,9 +89,10 @@ am4core.useTheme(am4themes_animated);
 const initialState = {
   visible: false,
   data: null,
-  university: "",
+  university: "...",
   grantamt: "",
   bannerCSS: { color: "#FFF", backgroundColor: "#282c34", fontSize: 500 },
+  state: "...",
 };
 class App extends Component {
   constructor(props) {
@@ -760,7 +761,8 @@ class App extends Component {
 
   renderState = (state) => {
     var chart = am4core.create("chartdiv", am4maps.MapChart);
-    console.log(state);
+
+    this.setState({ state: state.name });
     // Set map definition
     chart.geodata = state.stateMap;
 
@@ -861,6 +863,7 @@ class App extends Component {
 
   render() {
     let cityInfo;
+    const { classes } = this.props;
     if (this.state.visible) {
       cityInfo = <Card><text>
         <div>  {this.state.university} </div>
@@ -903,32 +906,34 @@ class App extends Component {
                 }
               }} options={schoolsArray} />
             </div>
+
             <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
               <Card>
-              <CardHeader title="Click on a state or school for more info" />
+              <label class="cardHeader">Click on a state or school for more info</label>
+              {/* <CardHeader title="Click on a state or school for more info" /> */}
                 <CardMedia>
                   <div id="chartdiv" style={{ width: "100%", height: "400px" }}></div>
                   {/* <label class="infoText">Click on a state to view more info</label> */}
                 </CardMedia>
               </Card>
-
               <button onClick={this.resetState}>Return to United States Map</button>
-
             </div>
           </div>
           <div class="cityInfo floatright">
             <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
               <Card>
-                <CardHeader title="Top 5 Schools in State" />
+                <label class="cardHeader">Top 5 Schools in {this.state.state} </label>
+                {/* <CardHeader title="Top 5 Schools in State" /> */}
                 <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
               </Card>
             </div>
             <div style={{marginLeft: '5%', marginRight: '5%'}}>
-            {cityInfo}
+            {/* {cityInfo} */}
             </div>
-            <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
+            <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '0%', marginBottom: '5%' }}>
               <Card>
-                <CardHeader title="School Historical Scholarships" />
+                <label class="cardHeader">{"Grant amounts awarded to " + this.state.university}</label>
+                {/* <CardHeader title={"Grant amounts awarded to " + this.state.university} /> */}
                 <div id="chartdiv3" style={{ width: "100%", height: "400px" }}></div>
               </Card>
             </div>

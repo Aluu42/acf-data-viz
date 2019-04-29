@@ -85,6 +85,15 @@
   color: #282c34;
 }
 
+.title {
+  font-size: 5%;
+}
+
+.cardHeader {
+  font-size: 200%;
+  font-family: "Helvetica Neue";
+}
+
 /* .map-marker .dot {
   border: 2px solid #fff601;
   background: transparent;
