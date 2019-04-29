@@ -924,7 +924,7 @@ class App extends Component {
               </Card>
 
               <div style={{marginTop: '1%'}}>
-                <button type="button" class="btn btn-dark" onClick={this.resetState}>Return to United States Map</button>
+                <button type="button" class="btn btn-danger" onClick={this.resetState}>Return to United States Map</button>
               </div>
             </div>
           </div>
