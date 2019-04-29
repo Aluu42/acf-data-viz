@@ -815,6 +815,7 @@ class App extends Component {
         visible: true,
         university: school + ": ",
         totalGrant: "$" + grant,
+        chartType: "school",
       });
       this.renderSchoolChart(ev.target.dataItem.dataContext);
     }, this);
@@ -912,7 +913,7 @@ class App extends Component {
       </div>;
 
     let stateCard =
-      <div class="searchBars" style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '1%' }} >
+      <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '1%' }} >
         <Card>
           <label class="cardHeader">Top 5 Schools in {this.state.state} </label>
           <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
@@ -920,12 +921,15 @@ class App extends Component {
       </div>;
 
     let topSchoolsCard =
-      <div class="searchBars" style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '1%' }} >
+      <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '1%' }} >
         <Card>
           <label class="cardHeader">{"Grant amounts awarded to " + this.state.university}</label>
           <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
-        </Card>;
-      </div>
+        </Card>
+        {/* <div style={{ marginTop: '1%' }}>
+          <button type="button" class="btn btn-danger" onClick={this.resetState}>Return to Map of {this.state.state}</button>
+        </div> */}
+      </div>;
 
     let chartCard = this.state.chartType === "school" ? topSchoolsCard : stateCard;
 
