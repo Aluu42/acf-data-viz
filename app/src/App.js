@@ -903,7 +903,7 @@ class App extends Component {
         <Card>
           <label class="cardHeader">Click on a state or school for more info</label>
           <CardMedia>
-            <div id="chartdiv" style={{ width: "100%", height: "300px" }}></div>
+            <div id="chartdiv" style={{ width: "100%", height: "350px" }}></div>
           </CardMedia>
         </Card>
         <div style={{ marginTop: '1%' }}>
@@ -920,10 +920,12 @@ class App extends Component {
       </div>;
 
     let topSchoolsCard =
-      <Card>
-        <label class="cardHeader">{"Grant amounts awarded to " + this.state.university}</label>
-        <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
-      </Card>;
+      <div class="searchBars" style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '1%' }} >
+        <Card>
+          <label class="cardHeader">{"Grant amounts awarded to " + this.state.university}</label>
+          <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
+        </Card>;
+      </div>
 
     let chartCard = this.state.chartType === "school" ? topSchoolsCard : stateCard;
 
