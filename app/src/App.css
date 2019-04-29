@@ -30,7 +30,9 @@
 }
 
 .infoText {
-  color: #295b68;
+  margin-left: 8px;
+  margin-top: 8px;
+  color: #000000;
   font-size: 205%;
 }
 
@@ -72,7 +74,7 @@
 }
 
 .floatleft {
-  float:left; 
+  float:left;
   width: 60%;
   height: 100%;
 }
@@ -84,7 +86,9 @@
 }
 
 .cardHeaderText {
-  color: #282c34;
+  margin-left: 8px;
+  margin-top: 8px;
+  color: #000000;
 }
 
 .title {
@@ -92,9 +96,11 @@
 }
 
 .cardHeader {
+  margin-left: 8px;
+  margin-top: 8px;
   font-size: 125%;
   font-family: 'Roboto', sans-serif;
-  color: #EE4742;
+  color: #000000;
 }
 
 /* .map-marker .dot {
