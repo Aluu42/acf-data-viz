@@ -90,8 +90,8 @@ const initialState = {
   data: null,
   university: "...",
   grantamt: "",
-  bannerCSS: { color: "#FFF", backgroundColor: "#282c34", fontSize: 500 },
   state: "...",
+  chartType: "",
 };
 class App extends Component {
   constructor(props) {
@@ -101,7 +101,7 @@ class App extends Component {
     this.renderSchoolData = this.renderSchoolData.bind(this);
     this.loadData = this.loadData.bind(this);
     this.dataCallback = this.dataCallback.bind(this);
-    this.renderChart = this.renderChart.bind(this);
+    this.renderStateChart = this.renderStateChart.bind(this);
     this.renderSchoolChart = this.renderSchoolChart.bind(this);
   }
 
@@ -158,14 +158,14 @@ class App extends Component {
         var exists = false;
         var j;
         var currYear = "20" + results.data[i].GrantDate.substring(results.data[i].GrantDate.length - 2);
-        for(j = 0; j < yearByYearGrant.length; j++){
-          if(yearByYearGrant[j].year == currYear){
+        for (j = 0; j < yearByYearGrant.length; j++) {
+          if (yearByYearGrant[j].year == currYear) {
             yearByYearGrant[j].total += 1;
             yearByYearGrant[j].grantAmount += grantAmount;
             exists = true;
           }
         }
-        if(!exists){
+        if (!exists) {
           var yearGrant = { year: currYear, total: 1, grantAmount: grantAmount };
           yearByYearGrant.push(yearGrant);
         }
@@ -561,7 +561,7 @@ class App extends Component {
       // put sum in value of data array
       polygonSeries.data[i].value = sum;
       statesArray.push(polygonSeries.data[i].id.substring(3));
-      
+
       let stateString = polygonSeries.data[i].id.substring(3);
       statesMap.set(stateString, sum);
 
@@ -619,15 +619,10 @@ class App extends Component {
     hs.properties.fill = am4core.color("#3c5bdc");
 
     polygonTemplate.events.on("hit", (ev) => {
-      // ev.target.series.chart.zoomToMapObject(ev.target);
-      // console.log(ev.target);
       let state = ev.target.dataItem.dataContext;
       this.renderState(state);
-      // console.log(state);
-      // this.showSchoolsByState(state.id.substring(3));
-      //console.log(state);
-      //this.showSchoolsByState(state.id.substring(3));
-      this.renderChart(state, polygonSeries.data);
+      this.setState({ chartType: "state" });
+      this.renderStateChart(state, polygonSeries.data);
     });
 
     let imageSeries = chart.series.push(new am4maps.MapImageSeries());
@@ -651,6 +646,7 @@ class App extends Component {
         visible: true,
         university: school + ": ",
         totalGrant: "$" + grant,
+        chartType: "school",
       });
       this.renderSchoolChart(ev.target.dataItem.dataContext);
     }, this);
@@ -664,8 +660,7 @@ class App extends Component {
   }
 
   renderSchoolChart = (school) => {
-    // state = state.id.substring(3);
-    let chart3 = am4core.create("chartdiv3", am4charts.XYChart);
+    let chart3 = am4core.create("chartdiv2", am4charts.XYChart);
 
     // Add data
     chart3.data = school.yearlyList;
@@ -691,14 +686,13 @@ class App extends Component {
     series.columns.template.tooltipText = "{categoryX}: [bold]{valueY.total}[/]";
     series.columns.template.fillOpacity = .8;
 
-
     let columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
     columnTemplate.strokeOpacity = 1;
+
   }
 
-  renderChart = (state, stateData) => {
-    console.log(state);
+  renderStateChart = (state, stateData) => {
 
     let chart2 = am4core.create("chartdiv2", am4charts.XYChart);
 
@@ -706,6 +700,7 @@ class App extends Component {
     schoolData.sort(function (a, b) {
       return parseInt(b.totalGrant) - parseInt(a.totalGrant);
     });
+
     // Add data
     chart2.data = schoolData.slice(0, 5);
 
@@ -715,16 +710,12 @@ class App extends Component {
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.minGridDistance = 30;
 
-
-
     categoryAxis.renderer.labels.template.fontSize = 10;
-    //categoryAxis.renderer.labels.template.horizontalCenter = "right";
-    //categoryAxis.renderer.labels.template.verticalCenter = "middle";
     categoryAxis.renderer.labels.template.wrap = true;
     categoryAxis.renderer.labels.template.maxWidth = 75;
-    //categoryAxis.renderer.labels.template.rotation = 270;
 
     let valueAxis = chart2.yAxes.push(new am4charts.ValueAxis());
+
     // Create series
     let series = chart2.series.push(new am4charts.ColumnSeries());
     series.dataFields.valueY = "totalGrant";
@@ -744,6 +735,7 @@ class App extends Component {
         visible: true,
         university: school[0].title + ":",
         totalGrant: "$" + school[0].totalGrant,
+        chartType: "school",
       });
       this.renderSchoolChart(school[0]);
     }, this);
@@ -867,86 +859,89 @@ class App extends Component {
   }
 
   render() {
-    let cityInfo;
-    const { classes } = this.props;
-    if (this.state.visible) {
-      cityInfo = <Card><text>
-        <div>  {this.state.university} </div>
-         Total Grants: {this.state.totalGrant} </text><br /></Card>;
-    }
+
+    let searchBars =
+      <div class="searchBars" style={{ marginLeft: '5%', marginRight: '5%', marginTop: '3.5%', marginBottom: '1%' }} >
+        <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
+          if (selected.length === 0) {
+            this.setState({ visible: false, university: "", totalGrant: "" });
+          }
+          else {
+            let state = sData.filter((obj) => {
+              if (obj.id.substring(3) === selected.toString()) {
+                return obj;
+              }
+            });
+            this.renderState(state[0]);
+            this.setState({ chartType: "state" });
+            this.renderStateChart(state[0], []);
+          }
+        }} options={statesArray} />
+        <Typeahead id="search-bar" placeholder="search by school" onChange={(selected) => {
+          if (selected.length === 0) {
+            this.setState({ visible: false, university: "", totalGrant: "" });
+          }
+          else {
+            this.showSchools(selected);
+            let school = dataObjects.filter((obj) => {
+              if (obj.title === selected.toString()) {
+                return obj;
+              }
+            });
+            this.setState({
+              visible: true,
+              university: selected.toString() + ": ",
+              chartType: "school",
+            });
+            this.renderSchoolChart(school[0]);
+          }
+        }} options={schoolsArray} />
+      </div>;
+
+    let mapCard =
+      <div>
+        <Card>
+          <label class="cardHeader">Click on a state or school for more info</label>
+          <CardMedia>
+            <div id="chartdiv" style={{ width: "100%", height: "300px" }}></div>
+          </CardMedia>
+        </Card>
+        <div style={{ marginTop: '1%' }}>
+          <button type="button" class="btn btn-danger" onClick={this.resetState}>Return to United States Map</button>
+        </div>
+      </div>;
+
+    let stateCard =
+      <div class="searchBars" style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '1%' }} >
+        <Card>
+          <label class="cardHeader">Top 5 Schools in {this.state.state} </label>
+          <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
+        </Card>
+      </div>;
+
+    let topSchoolsCard =
+      <Card>
+        <label class="cardHeader">{"Grant amounts awarded to " + this.state.university}</label>
+        <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
+      </Card>;
+
+    let chartCard = this.state.chartType === "school" ? topSchoolsCard : stateCard;
 
     return (
       <div class="wrap">
         <div class="contents">
           <div id="bannerimage"></div>
           <div class="floatleft">
-            <div class="searchBars" style={{marginLeft: '5%', marginRight: '5%', marginTop: '0%'}} >
-              <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
-                if (selected.length === 0) {
-                  this.setState({ visible: false, university: "", totalGrant: "" });
-                }
-                else {
-                  let state = sData.filter((obj) => {
-                    if (obj.id.substring(3) === selected.toString()) {
-                      return obj;
-                    }
-                  });
-                  this.renderState(state[0]);
-                  this.renderChart(state[0], []);
-                }
-              }} options={statesArray} />
-              <Typeahead id="search-bar" placeholder="search by school" onChange={(selected) => {
-                if (selected.length === 0) {
-                  this.setState({ visible: false, university: "", totalGrant: "" });
-                }
-                else {
-                  this.showSchools(selected);
-                  let school = dataObjects.filter((obj) => {
-                    if (obj.title === selected.toString()) {
-                      return obj;
-                    }
-                  });
-                  console.log(school[0]);
-                  this.renderSchoolChart(school[0]);
-                }
-              }} options={schoolsArray} />
-            </div>
-
+            {searchBars}
             <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '0%', marginBottom: '0%' }}>
-              <Card>
-              <label class="cardHeader">Click on a state or school for more info</label>
-              {/* <CardHeader title="Click on a state or school for more info" /> */}
-                <CardMedia>
-                  <div id="chartdiv" style={{ width: "100%", height: "400px" }}></div>
-                  {/* <label class="infoText">Click on a state to view more info</label> */}
-                </CardMedia>
-              </Card>
-
-              <div style={{marginTop: '1%'}}>
-                <button type="button" class="btn btn-danger" onClick={this.resetState}>Return to United States Map</button>
+              <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
+                {mapCard}
               </div>
             </div>
           </div>
 
           <div class="cityInfo floatright">
-            <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
-              <Card>
-                <label class="cardHeader">Top 5 Schools in {this.state.state} </label>
-                {/* <CardHeader title="Top 5 Schools in State" /> */}
-                <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
-              </Card>
-            </div>
-            <div style={{marginLeft: '5%', marginRight: '5%'}}>
-            {/* {cityInfo} */}
-            </div>
-            <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '0%', marginBottom: '5%' }}>
-              <Card>
-                <label class="cardHeader">{"Grant amounts awarded to " + this.state.university}</label>
-                {/* <CardHeader title={"Grant amounts awarded to " + this.state.university} /> */}
-                <div id="chartdiv3" style={{ width: "100%", height: "400px" }}></div>
-              </Card>
-            </div>
-
+            {chartCard}
           </div>
         </div>
       </div>
