@@ -585,6 +585,7 @@ class App extends Component {
     let heatLegend = chart.createChild(am4maps.HeatLegend);
     heatLegend.series = polygonSeries;
     heatLegend.align = "left";
+    heatLegend.dx = 25;
     heatLegend.valign = "top";
     heatLegend.width = am4core.percent(25);
     heatLegend.marginRight = am4core.percent(4);
