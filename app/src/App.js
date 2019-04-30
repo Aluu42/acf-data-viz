@@ -1024,6 +1024,8 @@ class App extends Component {
           </div>
       </div>;
 
+    let state = this.state.state === "..." ? "" : this.state.state;
+
     return (
       <div class="wrap">
         <div class="contents">
@@ -1044,7 +1046,7 @@ class App extends Component {
                   </CardMedia>
                 </Card>
                 <div style={{ marginTop: '1%' }}>
-                  <button type="button" class="btn btn-dark" onClick={this.back}>View State Chart</button>
+                  <button type="button" class="btn btn-dark" onClick={this.back}>View {state} Chart</button>
                 </div>
               </div>
             </div>
