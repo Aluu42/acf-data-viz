@@ -904,7 +904,7 @@ class App extends Component {
 
     let mapCard =
       <div>
-        <Card>
+        <Card styles={{ card: { backgroundColor: 'red' }}}>
           <label class="cardHeader">Click on a state or school for more info</label>
           <CardMedia>
             <div id="chartdiv" style={{ width: "100%", height: "400px" }}></div>
