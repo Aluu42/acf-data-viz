@@ -1085,11 +1085,11 @@ class App extends Component {
           </div>
 
           <div class="cityInfo floatright">
-            <div style={{ marginTop: '25.5%', marginRight: '5%'}}>
+            <div style={{ marginTop: '25.8%', marginRight: '5%'}}>
               <div>
                 <Card>
                   <CardMedia>
-                    <div id="chartdiv2" style={{ width: "100%", height: '55vh' }}></div>
+                    <div id="chartdiv2" style={{ width: "100%", height: '50vh' }}></div>
                   </CardMedia>
                 </Card>
                 <div style={{ marginTop: '1%' }}>
