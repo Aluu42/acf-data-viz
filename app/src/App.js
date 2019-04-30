@@ -110,6 +110,7 @@ class App extends Component {
     this.dataCallback = this.dataCallback.bind(this);
     this.renderStateChart = this.renderStateChart.bind(this);
     this.renderSchoolChart = this.renderSchoolChart.bind(this);
+    this.renderGeneralStats = this.renderGeneralStats.bind(this);
   }
 
   resetState = () => {
@@ -975,7 +976,7 @@ class App extends Component {
       this.renderStateChart(state[0], []);
   }
 
-  renderGeneralStats () {
+  renderGeneralStats = () => {
     var bigDiv = document.getElementById('chartdiv2');
 
     var centerText = document.createElement("div");
@@ -1012,6 +1013,7 @@ class App extends Component {
 
 
     bigDiv.appendChild(centerText);
+
   }
 
   render() {
