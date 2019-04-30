@@ -110,12 +110,12 @@ class App extends Component {
     this.dataCallback = this.dataCallback.bind(this);
     this.renderStateChart = this.renderStateChart.bind(this);
     this.renderSchoolChart = this.renderSchoolChart.bind(this);
+    this.renderGeneralStats = this.renderGeneralStats.bind(this);
   }
 
   resetState = () => {
     statesArray = Array.from(new Set(statesArray));
     this.renderMap();
-    this.renderGeneralStats();
   }
 
   dataCallback = (results, file) => {
@@ -975,7 +975,7 @@ class App extends Component {
       this.renderStateChart(state[0], []);
   }
 
-  renderGeneralStats () {
+  renderGeneralStats = () => {
     var bigDiv = document.getElementById('chartdiv2');
 
     var centerText = document.createElement("div");
@@ -1012,6 +1012,7 @@ class App extends Component {
 
 
     bigDiv.appendChild(centerText);
+
   }
 
   render() {
@@ -1059,11 +1060,11 @@ class App extends Component {
 
     let mapCard =
       <div>
-        <Card>
-          <CardMedia>
+        <div class="mdc-card">
+          {/* <CardMedia> */}
             <div id="chartdiv" style={{ width: "100%", height: '50vh'}}></div>
-          </CardMedia>
-        </Card>
+          {/* </CardMedia> */}
+        </div>
         <div style={{ marginTop: '1%' }}>
             <button type="button" class="btn btn-dark" onClick={this.resetState}>Return to United States Map</button>
           </div>
@@ -1083,13 +1084,13 @@ class App extends Component {
           </div>
 
           <div class="cityInfo floatright">
-            <div style={{ marginTop: '25.5%', marginRight: '5%'}}>
+            <div style={{ marginTop: '25.8%', marginRight: '5%'}}>
               <div>
-                <Card>
-                  <CardMedia>
-                    <div id="chartdiv2" style={{ width: "100%", height: '55vh' }}></div>
-                  </CardMedia>
-                </Card>
+                <div class="mdc-card">
+                  {/* <CardMedia> */}
+                    <div id="chartdiv2" style={{ width: "100%", height: '50vh' }}></div>
+                  {/* </CardMedia> */}
+                </div>
                 <div style={{ marginTop: '1%' }}>
                   <button type="button" class="btn btn-dark" onClick={this.back}>View {state} Chart</button>
                 </div>
