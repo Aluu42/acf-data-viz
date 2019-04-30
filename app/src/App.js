@@ -713,6 +713,10 @@ class App extends Component {
     circle.tooltipText = "{title}: ${totalGrant}";
 
     circle.events.on("hit", function (ev) {
+      let context = ev.target.dataItem.dataContext;
+
+      var state = schoolToState[context.title];
+      var index = stateToIndex[state];
       let school = ev.target.dataItem.dataContext.title;
       let grant = ev.target.dataItem.dataContext.totalGrant;
       this.setState({
@@ -721,6 +725,7 @@ class App extends Component {
         totalGrant: "$" + grant,
       });
       this.renderSchoolChart(ev.target.dataItem.dataContext);
+      this.renderState(sData[index]);
     }, this);
 
   }
@@ -842,6 +847,7 @@ class App extends Component {
 
   renderState = (state) => {
     var chart = am4core.create("chartdiv", am4maps.MapChart);
+    console.log(state);
 
     this.setState({ state: state.name });
     // Set map definition
@@ -945,16 +951,13 @@ class App extends Component {
   }
 
   back = () => {
-    console.log(this.state.state);
     let state = sData.filter((obj) => {
       if (obj.full === this.state.state.toString()) {
-        console.log(obj.full);
         return obj;
       }
     });
-    console.log(state);
-    this.renderStateChart(state[0], []);
-
+    if (state[0] != undefined)
+      this.renderStateChart(state[0], []);
   }
 
   render() {
@@ -995,9 +998,6 @@ class App extends Component {
             var state = schoolToState[selected.toString()];
             var index = stateToIndex[state];
             this.renderState(sData[index]);
-
-
-
             this.renderSchoolChart(school[0]);
           }
         }} options={schoolsArray} />
