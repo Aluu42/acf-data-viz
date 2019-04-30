@@ -255,300 +255,357 @@ class App extends Component {
         value: 4447100,
         schools: [],
         stateMap: AL,
+        full: "Alabama",
       },
       {
         id: "US-AK",
         value: 626932,
         schools: [],
         stateMap: AK,
+        full: "Alaska",
       },
       {
         id: "US-AZ",
         value: 5130632,
         schools: [],
         stateMap: AZ,
+        full: "Arizona",
       },
       {
         id: "US-AR",
         value: 2673400,
         schools: [],
         stateMap: AR,
+        full: "Arkansas",
       },
       {
         id: "US-CA",
         value: 33871648,
         schools: [],
         stateMap: CA,
+        full: "California",
       },
       {
         id: "US-CO",
         value: 4301261,
         schools: [],
         stateMap: CO,
+        full: "Colorado",
       },
       {
         id: "US-CT",
         value: 3405565,
         schools: [],
         stateMap: CT,
+        full: "Connecticut",
       },
       {
         id: "US-DE",
         value: 783600,
         schools: [],
         stateMap: DE,
+        full: "Delaware",
       },
       {
         id: "US-FL",
         value: 15982378,
         schools: [],
         stateMap: FL,
+        full: "Florida",
       },
       {
         id: "US-GA",
         value: 8186453,
         schools: [],
         stateMap: GA,
+        full: "Georgia",
       },
       {
         id: "US-HI",
         value: 1211537,
         schools: [],
         stateMap: HI,
+        full: "Hawaii",
       },
       {
         id: "US-ID",
         value: 1293953,
         schools: [],
         stateMap: ID,
+        full: "Idaho",
       },
       {
         id: "US-IL",
         value: 12419293,
         schools: [],
         stateMap: IL,
+        full: "Illinois",
       },
       {
         id: "US-IN",
         value: 6080485,
         schools: [],
         stateMap: IN,
+        full: "Indiana",
       },
       {
         id: "US-IA",
         value: 2926324,
         schools: [],
         stateMap: IA,
+        full: "Iowa",
       },
       {
         id: "US-KS",
         value: 2688418,
         schools: [],
         stateMap: KS,
+        full: "Kansas",
       },
       {
         id: "US-KY",
         value: 4041769,
         schools: [],
         stateMap: KY,
+        full: "Kentucky",
       },
       {
         id: "US-LA",
         value: 4468976,
         schools: [],
         stateMap: LA,
+        full: "Louisiana",
       },
       {
         id: "US-ME",
         value: 1274923,
         schools: [],
         stateMap: ME,
+        full: "Maine",
       },
       {
         id: "US-MD",
         value: 5296486,
         schools: [],
         stateMap: MD,
+        full: "Maryland",
       },
       {
         id: "US-MA",
         value: 6349097,
         schools: [],
         stateMap: MA,
+        full: "Massachusetts",
       },
       {
         id: "US-MI",
         value: 9938444,
         schools: [],
         stateMap: MI,
+        full: "Michigan",
       },
       {
         id: "US-MN",
         value: 4919479,
         schools: [],
         stateMap: MN,
+        full: "Minnesota",
       },
       {
         id: "US-MS",
         value: 2844658,
         schools: [],
         stateMap: MS,
+        full: "Mississippi",
       },
       {
         id: "US-MO",
         value: 5595211,
         schools: [],
         stateMap: MO,
+        full: "Missouri",
       },
       {
         id: "US-MT",
         value: 902195,
         schools: [],
         stateMap: MT,
+        full: "Montana",
       },
       {
         id: "US-NE",
         value: 1711263,
         schools: [],
         stateMap: NE,
+        full: "Nebraska",
       },
       {
         id: "US-NV",
         value: 1998257,
         schools: [],
         stateMap: NV,
+        full: "Nevada",
       },
       {
         id: "US-NH",
         value: 1235786,
         schools: [],
         stateMap: NH,
+        full: "New Hampshire",
       },
       {
         id: "US-NJ",
         value: 8414350,
         schools: [],
         stateMap: NJ,
+        full: "New Jersey",
       },
       {
         id: "US-NM",
         value: 1819046,
         schools: [],
         stateMap: NM,
+        full: "New Mexico",
       },
       {
         id: "US-NY",
         value: 18976457,
         schools: [],
         stateMap: NY,
+        full: "New York",
       },
       {
         id: "US-NC",
         value: 8049313,
         schools: [],
         stateMap: NC,
+        full: "North Carolina",
       },
       {
         id: "US-ND",
         value: 642200,
         schools: [],
         stateMap: ND,
+        full: "North Dakota",
       },
       {
         id: "US-OH",
         value: 11353140,
         schools: [],
         stateMap: OH,
+        full: "Ohio",
       },
       {
         id: "US-OK",
         value: 3450654,
         schools: [],
         stateMap: OK,
+        full: "Oklahoma",
       },
       {
         id: "US-OR",
         value: 3421399,
         schools: [],
         stateMap: OR,
+        full: "Oregon",
       },
       {
         id: "US-PA",
         value: 12281054,
         schools: [],
         stateMap: PA,
+        full: "Pennsylvania",
       },
       {
         id: "US-RI",
         value: 1048319,
         schools: [],
         stateMap: RI,
+        full: "Rhode Island",
       },
       {
         id: "US-SC",
         value: 4012012,
         schools: [],
         stateMap: SC,
+        full: "South Carolina",
       },
       {
         id: "US-SD",
         value: 754844,
         schools: [],
         stateMap: SD,
+        full: "South Dakota",
       },
       {
         id: "US-TN",
         value: 5689283,
         schools: [],
         stateMap: TN,
+        full: "Tennessee",
       },
       {
         id: "US-TX",
         value: 20851820,
         schools: [],
         stateMap: TX,
+        full: "Texas",
       },
       {
         id: "US-UT",
         value: 2233169,
         schools: [],
         stateMap: UT,
+        full: "Utah",
       },
       {
         id: "US-VT",
         value: 608827,
         schools: [],
         stateMap: VT,
+        full: "Vermont",
       },
       {
         id: "US-VA",
         value: 7078515,
         schools: [],
         stateMap: VA,
+        full: "Virginia",
       },
       {
         id: "US-WA",
         value: 5894121,
         schools: [],
         stateMap: WA,
+        full: "Washington",
       },
       {
         id: "US-WV",
         value: 1808344,
         schools: [],
         stateMap: WV,
+        full: "West Virginia",
       },
       {
         id: "US-WI",
         value: 5363675,
         schools: [],
         stateMap: WI,
+        full: "Wisconsin",
       },
       {
         id: "US-WY",
         value: 493782,
         schools: [],
         stateMap: WY,
+        full: "Wyoming",
+      },
+      {
+        id: "US-WY",
+        value: 493782,
+        schools: [],
+        stateMap: WY,
+        full: "Wyoming",
       }
     ];
 
@@ -881,6 +938,19 @@ class App extends Component {
     });
   }
 
+  back = () => {
+    console.log(this.state.state);
+    let state = sData.filter((obj) => {
+      if (obj.full === this.state.state.toString()) {
+        console.log(obj.full);
+        return obj;
+      }
+    });
+    console.log(state);
+    this.renderStateChart(state[0], []);
+
+  }
+
   render() {
 
     let searchBars =
@@ -951,10 +1021,15 @@ class App extends Component {
       </div>;
 
     let topSchoolsCard =
+      <div>
         <Card>
           <label class="cardHeader">{"Grant amounts awarded to " + this.state.university}</label>
           <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
-        </Card>;
+        </Card>
+        <div style={{ marginTop: '1%' }}>
+          <button type="button" class="btn btn-danger" onClick={this.back}>Back</button>
+        </div>
+      </div>;
 
     let chartCard = this.state.chartType === "school" ? topSchoolsCard : stateCard;
 
