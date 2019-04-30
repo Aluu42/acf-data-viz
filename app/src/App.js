@@ -135,10 +135,11 @@ class App extends Component {
       grantAmount = grantAmount.replace(',', "");
       grantAmount = parseFloat(grantAmount);
 
-      numScholarships++;
-      totalGrantAmount+=grantAmount;
-
       if (currSchool === results.data[i].Institution) {
+        
+        numScholarships++;
+        // console.log("num sch " + numScholarships);
+        totalGrantAmount+=grantAmount;
 
         let currLat = results.data[i].Latitude;
         if (currLat != null) {
