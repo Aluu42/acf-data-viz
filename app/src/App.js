@@ -83,6 +83,8 @@ let statesArray = [];
 let schoolsArray = [];
 const schoolsMap = new Map();
 let sData = [];
+var schoolToState = {};
+var stateToIndex = {};
 
 am4core.useTheme(am4themes_animated);
 const initialState = {
@@ -118,8 +120,15 @@ class App extends Component {
     let currState = zipcodes.lookup(results.data[0].PayeeZip).state;
     let yearByYearGrant = [];
 
+
+
     var i = 0;
     while (i < results.data.length) {
+        //  @@@@@@@@@@@@@@
+      //console.log(currSchool);
+      //console.log(currState);
+      schoolToState[currSchool] = currState.substring(3, 5);
+
 
       let grantAmount = results.data[i].GrantAmt.substring(1);
       grantAmount = grantAmount.replace(',', "");
@@ -190,6 +199,7 @@ class App extends Component {
       }
     }
 
+    //  map the school to its state
     let index;
     for (index = 0; index < dataObjects.length; index++) {
       schoolsMap.set(dataObjects[index].title, dataObjects[index].totalGrant);
@@ -540,6 +550,13 @@ class App extends Component {
         stateMap: WY,
       }
     ];
+
+    //  map the state to its index in sData
+    var index;
+    for(index = 0; index < polygonSeries.data.length; index++){
+      let state = polygonSeries.data[index].id.substring(3, 5);
+      stateToIndex[state] = index;
+    }
 
     let minValue = 0;
     let maxValue = 0;
@@ -897,6 +914,14 @@ class App extends Component {
               university: selected.toString() + ": ",
               chartType: "school",
             });
+
+            //  change the current state displayed to the state this school belongs to
+            var state = schoolToState[selected.toString()];
+            var index = stateToIndex[state];
+            this.renderState(sData[index]);
+
+
+
             this.renderSchoolChart(school[0]);
           }
         }} options={schoolsArray} />
