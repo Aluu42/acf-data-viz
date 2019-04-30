@@ -1027,7 +1027,7 @@ class App extends Component {
           <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
         </Card>
         <div style={{ marginTop: '1%' }}>
-          <button type="button" class="btn btn-danger" onClick={this.back}>Back</button>
+          <button type="button" class="btn btn-dark" onClick={this.back}>Back</button>
         </div>
       </div>;
 
