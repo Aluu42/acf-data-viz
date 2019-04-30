@@ -739,7 +739,7 @@ class App extends Component {
 
     let title = chart3.titles.create();
     title.text = "Grant amounts awarded to " + school.title;
-    title.fontSize = 25;
+    title.fontSize = 15;
     title.marginBottom = 30;
 
     // Add data
@@ -780,7 +780,7 @@ class App extends Component {
 
     let title = chart2.titles.create();
     title.text = "Top 5 Schools in " +  state.name;
-    title.fontSize = 25;
+    title.fontSize = 15;
     title.marginBottom = 30;
 
     let schoolData = state.schools;
@@ -1014,7 +1014,7 @@ class App extends Component {
         <Card>
           <label class="cardHeader">Click on a state or school for more info</label>
           <CardMedia>
-            <div id="chartdiv" style={{ width: "100%", height: "400px" }}></div>
+            <div id="chartdiv" style={{ width: "100%", height: '50vh'}}></div>
           </CardMedia>
         </Card>
         <div style={{ marginTop: '1%' }}>
@@ -1027,7 +1027,7 @@ class App extends Component {
       <div class="wrap">
         <div class="contents">
           <div id="bannerimage"></div>
-          <div class="floatleft">
+          <div class="floatleft" >
             {searchBars}
             <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
               {mapCard}
@@ -1035,15 +1035,17 @@ class App extends Component {
           </div>
 
           <div class="cityInfo floatright">
-            <div style={{ marginTop: '26.5%', marginRight: '5%'}}>
+            <div style={{ marginTop: '28.5%', marginRight: '5%'}}>
               <div>
                 <Card>
-                  <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
+                  <CardMedia>
+                    <div id="chartdiv2" style={{ width: "100%", height: '56vh' }}></div>
+                  </CardMedia>
                 </Card>
                 <div style={{ marginTop: '1%' }}>
                   <button type="button" class="btn btn-dark" onClick={this.back}>Back</button>
                 </div>
-              </div>;
+              </div>
             </div>
           </div>
         </div>
