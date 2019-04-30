@@ -756,14 +756,14 @@ class App extends Component {
     // categoryAxis.renderer.labels.template.rotation = 270;
 
     let valueAxis = chart3.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.calculateTotals = true;
     // Create series
     let series = chart3.series.push(new am4charts.ColumnSeries());
     series.dataFields.valueY = "grantAmount";
+    series.dataFields.value = "total"
     series.dataFields.categoryX = "year";
     series.name = "Year";
     series.stacked = true;
-    series.columns.template.tooltipText = "{categoryX}: [bold]{valueY.total}[/]";
+    series.columns.template.tooltipText = "Total: [bold]${valueY}[/]\nGrants: [bold]{total}";
     series.columns.template.fillOpacity = .8;
     series.stroke = am4core.color("#B4D9DB");
     series.columns.template.fill = am4core.color("#B4D9DB");
