@@ -1038,15 +1038,15 @@ class App extends Component {
           </div>
 
           <div class="cityInfo floatright">
-            <div style={{ marginTop: '28.5%', marginRight: '5%'}}>
+            <div style={{ marginTop: '25.5%', marginRight: '5%'}}>
               <div>
                 <Card>
                   <CardMedia>
-                    <div id="chartdiv2" style={{ width: "100%", height: '56vh' }}></div>
+                    <div id="chartdiv2" style={{ width: "100%", height: '55vh' }}></div>
                   </CardMedia>
                 </Card>
                 <div style={{ marginTop: '1%' }}>
-                  <button type="button" class="btn btn-dark" onClick={this.back}>Back</button>
+                  <button type="button" class="btn btn-dark" onClick={this.back}>View State Chart</button>
                 </div>
               </div>
             </div>
