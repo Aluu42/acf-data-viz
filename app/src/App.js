@@ -14,6 +14,10 @@ import Banner from 'react-js-banner';
 import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import 'font-awesome/css/font-awesome.min.css';
 
 import AL from "@amcharts/amcharts4-geodata/region/usa/alLow";
 import AK from "@amcharts/amcharts4-geodata/region/usa/akLow";
@@ -123,7 +127,7 @@ class App extends Component {
 
     var i = 0;
     while (i < results.data.length) {
-        //  @@@@@@@@@@@@@@
+      //  @@@@@@@@@@@@@@
       //console.log(currSchool);
       //console.log(currState);
       schoolToState[currSchool] = currState.substring(3, 5);
@@ -610,7 +614,7 @@ class App extends Component {
 
     //  map the state to its index in sData
     var index;
-    for(index = 0; index < polygonSeries.data.length; index++){
+    for (index = 0; index < polygonSeries.data.length; index++) {
       let state = polygonSeries.data[index].id.substring(3, 5);
       stateToIndex[state] = index;
     }
@@ -741,7 +745,7 @@ class App extends Component {
 
     let title = chart3.titles.create();
     title.text = "Grant amounts awarded to " + school.title;
-    title.fontSize = 25;
+    title.fontSize = 15;
     title.marginBottom = 30;
 
     // Add data
@@ -781,7 +785,7 @@ class App extends Component {
     let chart2 = am4core.create("chartdiv2", am4charts.XYChart);
 
     let title = chart2.titles.create();
-    title.text = "Top 5 Schools in " +  state.name;
+    title.text = "Top 5 Schools in " + state.name;
     title.fontSize = 25;
     title.marginBottom = 30;
 
@@ -852,6 +856,11 @@ class App extends Component {
     this.setState({ state: state.name });
     // Set map definition
     chart.geodata = state.stateMap;
+
+    let title = chart.titles.create();
+    title.text = "Click on a state or school for more info";
+    title.fontSize = 25;
+    title.marginBottom = 30;
 
     // Set projection
     chart.projection = new am4maps.projections.Miller();
@@ -1007,13 +1016,15 @@ class App extends Component {
       <div>
         <Card>
           <label class="cardHeader">Click on a state or school for more info</label>
+          <br></br>
+          <FontAwesomeIcon onClick={this.resetState} icon={faArrowLeft} />
           <CardMedia>
             <div id="chartdiv" style={{ width: "100%", height: "400px" }}></div>
           </CardMedia>
         </Card>
-        <div style={{ marginTop: '1%' }}>
+        {/* <div style={{ marginTop: '1%' }}>
           <button type="button" class="btn btn-dark" onClick={this.resetState}>Return to United States Map</button>
-        </div>
+        </div> */}
       </div>;
 
     return (
@@ -1028,15 +1039,17 @@ class App extends Component {
           </div>
 
           <div class="cityInfo floatright">
-            <div style={{ marginTop: '26.5%', marginRight: '5%'}}>
+            <div style={{ marginTop: '26.5%', marginRight: '5%' }}>
               {/* {stateCard} */}
               <div>
                 <Card>
+                  <br></br>
+                  <FontAwesomeIcon onClick={this.back} icon={faArrowLeft} />
                   <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
                 </Card>
-                <div style={{ marginTop: '1%' }}>
+                {/* <div style={{ marginTop: '1%' }}>
                   <button type="button" class="btn btn-dark" onClick={this.back}>Back</button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
