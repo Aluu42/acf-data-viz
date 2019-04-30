@@ -28,6 +28,15 @@
 .contents {
   align-content: 'center';
 }
+.general-stats-div {
+  padding: 10%;
+}
+.general-stats {
+  color: #274255;
+  font-style: 'Arial';
+  text-align: center;
+  margin: 10%;
+}
 
 .infoText {
   margin-left: 8px;
