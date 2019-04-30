@@ -762,14 +762,14 @@ class App extends Component {
     // categoryAxis.renderer.labels.template.rotation = 270;
 
     let valueAxis = chart3.yAxes.push(new am4charts.ValueAxis());
-    valueAxis.calculateTotals = true;
     // Create series
     let series = chart3.series.push(new am4charts.ColumnSeries());
     series.dataFields.valueY = "grantAmount";
+    series.dataFields.value = "total"
     series.dataFields.categoryX = "year";
     series.name = "Year";
     series.stacked = true;
-    series.columns.template.tooltipText = "{categoryX}: [bold]{valueY.total}[/]";
+    series.columns.template.tooltipText = "Total: [bold]${valueY}[/]\nGrants: [bold]{total}";
     series.columns.template.fillOpacity = .8;
     series.stroke = am4core.color("#B4D9DB");
     series.columns.template.fill = am4core.color("#B4D9DB");
@@ -785,8 +785,8 @@ class App extends Component {
     let chart2 = am4core.create("chartdiv2", am4charts.XYChart);
 
     let title = chart2.titles.create();
-    title.text = "Top 5 Schools in " + state.name;
-    title.fontSize = 25;
+    title.text = "Top 5 Schools in " +  state.name;
+    title.fontSize = 15;
     title.marginBottom = 30;
 
     let schoolData = state.schools;
@@ -858,7 +858,7 @@ class App extends Component {
     chart.geodata = state.stateMap;
 
     let title = chart.titles.create();
-    title.text = "Click on a state or school for more info";
+    // title.text = "Click on a state or school for more info";
     title.fontSize = 25;
     title.marginBottom = 30;
 
@@ -1019,7 +1019,7 @@ class App extends Component {
             <button type="button" class="btn btn-dark" onClick={this.resetState}>Return to United States Map</button>
           </div>
           <CardMedia>
-            <div id="chartdiv" style={{ width: "100%", height: "400px" }}></div>
+            <div id="chartdiv" style={{ width: "100%", height: '50vh'}}></div>
           </CardMedia>
         </Card>
       </div>;
@@ -1028,7 +1028,7 @@ class App extends Component {
       <div class="wrap">
         <div class="contents">
           <div id="bannerimage"></div>
-          <div class="floatleft">
+          <div class="floatleft" >
             {searchBars}
             <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
               {mapCard}
@@ -1036,14 +1036,16 @@ class App extends Component {
           </div>
 
           <div class="cityInfo floatright">
-            <div style={{ marginTop: '26.5%', marginRight: '5%' }}>
+            <div style={{ marginTop: '28.5%', marginRight: '5%'}}>
               <div>
                 <Card>
-                  <div style={{ marginTop: '1%' }}>
-                    <button type="button" class="btn btn-dark" onClick={this.back}>Back</button>
-                  </div>
-                  <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
+                  <CardMedia>
+                    <div id="chartdiv2" style={{ width: "100%", height: '56vh' }}></div>
+                  </CardMedia>
                 </Card>
+                <div style={{ marginTop: '1%' }}>
+                  <button type="button" class="btn btn-dark" onClick={this.back}>Back</button>
+                </div>
               </div>
             </div>
           </div>
