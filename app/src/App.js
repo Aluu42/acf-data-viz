@@ -738,7 +738,7 @@ class App extends Component {
     let chart3 = am4core.create("chartdiv2", am4charts.XYChart);
 
     let title = chart3.titles.create();
-    title.text = "Grant amounts awarded to " + this.state.university;
+    title.text = "Grant amounts awarded to " + school.title;
     title.fontSize = 25;
     title.marginBottom = 30;
 
@@ -779,7 +779,7 @@ class App extends Component {
     let chart2 = am4core.create("chartdiv2", am4charts.XYChart);
 
     let title = chart2.titles.create();
-    title.text = "Top 5 Schools in " +this.state.state;
+    title.text = "Top 5 Schools in " +  state.name;
     title.fontSize = 25;
     title.marginBottom = 30;
 
@@ -1022,27 +1022,6 @@ class App extends Component {
         </div>
       </div>;
 
-    let stateCard =
-      <div >
-        <Card>
-          <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
-        </Card>
-        <div style={{ marginTop: '1%' }}>
-          <button type="button" class="btn btn-dark" onClick={this.back}>Back</button>
-        </div>
-      </div>;
-
-    let topSchoolsCard =
-      <div>
-        <Card>
-          <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
-        </Card>
-        <div style={{ marginTop: '1%' }}>
-          <button type="button" class="btn btn-dark" onClick={this.back}>Back</button>
-        </div>
-      </div>;
-
-    let chartCard = this.state.chartType === "school" ? topSchoolsCard : stateCard;
 
     return (
       <div class="wrap">
@@ -1057,7 +1036,14 @@ class App extends Component {
 
           <div class="cityInfo floatright">
             <div style={{ marginTop: '26.5%', marginRight: '5%'}}>
-              {chartCard}
+              <div>
+                <Card>
+                  <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
+                </Card>
+                <div style={{ marginTop: '1%' }}>
+                  <button type="button" class="btn btn-dark" onClick={this.back}>Back</button>
+                </div>
+              </div>;
             </div>
           </div>
         </div>
