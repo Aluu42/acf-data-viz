@@ -116,7 +116,6 @@ class App extends Component {
   resetState = () => {
     statesArray = Array.from(new Set(statesArray));
     this.renderMap();
-    this.renderGeneralStats();
   }
 
   dataCallback = (results, file) => {
