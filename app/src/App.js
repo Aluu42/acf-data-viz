@@ -91,7 +91,6 @@ const initialState = {
   university: "...",
   grantamt: "",
   state: "...",
-  chartType: "",
 };
 class App extends Component {
   constructor(props) {
@@ -228,7 +227,7 @@ class App extends Component {
     chart.projection = new am4maps.projections.Albers();
 
     chart.zoomControl = new am4maps.ZoomControl();
-    chart.zoomControl.align = "left";
+    chart.zoomControl.align = "right";
     chart.centerMap = true;
 
     // Create map polygon series
@@ -621,7 +620,6 @@ class App extends Component {
     polygonTemplate.events.on("hit", (ev) => {
       let state = ev.target.dataItem.dataContext;
       this.renderState(state);
-      this.setState({ chartType: "state" });
       this.renderStateChart(state, polygonSeries.data);
     });
 
@@ -646,7 +644,6 @@ class App extends Component {
         visible: true,
         university: school + ": ",
         totalGrant: "$" + grant,
-        chartType: "school",
       });
       this.renderSchoolChart(ev.target.dataItem.dataContext);
     }, this);
@@ -739,7 +736,6 @@ class App extends Component {
         visible: true,
         university: school[0].title + ":",
         totalGrant: "$" + school[0].totalGrant,
-        chartType: "school",
       });
       this.renderSchoolChart(school[0]);
     }, this);
@@ -819,7 +815,6 @@ class App extends Component {
         visible: true,
         university: school + ": ",
         totalGrant: "$" + grant,
-        chartType: "school",
       });
       this.renderSchoolChart(ev.target.dataItem.dataContext);
     }, this);
@@ -866,7 +861,7 @@ class App extends Component {
   render() {
 
     let searchBars =
-      <div class="searchBars" style={{ marginLeft: '5%', marginRight: '5%', marginTop: '3.5%', marginBottom: '1%' }} >
+      <div class="searchBars" style={{ marginLeft: '5%', marginRight: '5%', marginTop: '3.5%' }} >
         <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
           if (selected.length === 0) {
             this.setState({ visible: false, university: "", totalGrant: "" });
@@ -878,7 +873,6 @@ class App extends Component {
               }
             });
             this.renderState(state[0]);
-            this.setState({ chartType: "state" });
             this.renderStateChart(state[0], []);
           }
         }} options={statesArray} />
@@ -896,7 +890,6 @@ class App extends Component {
             this.setState({
               visible: true,
               university: selected.toString() + ": ",
-              chartType: "school",
             });
             this.renderSchoolChart(school[0]);
           }
@@ -908,16 +901,16 @@ class App extends Component {
         <Card styles={{ card: { backgroundColor: 'red' }}}>
           <label class="cardHeader">Click on a state or school for more info</label>
           <CardMedia>
-            <div id="chartdiv" style={{ width: "100%", height: "350px" }}></div>
+            <div id="chartdiv" style={{ width: "100%", height: "400px" }}></div>
           </CardMedia>
         </Card>
         <div style={{ marginTop: '1%' }}>
-          <button type="button" class="btn btn-danger" onClick={this.resetState}>Return to United States Map</button>
+          <button type="button" class="btn btn-dark" onClick={this.resetState}>Return to United States Map</button>
         </div>
       </div>;
 
     let stateCard =
-      <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '1%' }} >
+      <div >
         <Card>
           <label class="cardHeader">Top 5 Schools in {this.state.state} </label>
           <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
@@ -925,17 +918,10 @@ class App extends Component {
       </div>;
 
     let topSchoolsCard =
-      <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '1%' }} >
         <Card>
           <label class="cardHeader">{"Grant amounts awarded to " + this.state.university}</label>
           <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
-        </Card>
-        {/* <div style={{ marginTop: '1%' }}>
-          <button type="button" class="btn btn-danger" onClick={this.resetState}>Return to Map of {this.state.state}</button>
-        </div> */}
-      </div>;
-
-    let chartCard = this.state.chartType === "school" ? topSchoolsCard : stateCard;
+        </Card>;
 
     return (
       <div class="wrap">
@@ -943,15 +929,15 @@ class App extends Component {
           <div id="bannerimage"></div>
           <div class="floatleft">
             {searchBars}
-            <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '0%', marginBottom: '0%' }}>
-              <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
-                {mapCard}
-              </div>
+            <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
+              {mapCard}
             </div>
           </div>
 
           <div class="cityInfo floatright">
-            {chartCard}
+            <div style={{ marginTop: '26.5%', marginRight: '5%'}}>
+              {stateCard}
+            </div>
           </div>
         </div>
       </div>
