@@ -957,7 +957,10 @@ class App extends Component {
       }
     });
     console.log(state);
-    this.renderStateChart(state[0], []);
+    if(typeof state[0] !== 'undefined')
+    {
+      this.renderStateChart(state[0], []);
+    }
 
   }
 
