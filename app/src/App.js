@@ -737,6 +737,11 @@ class App extends Component {
   renderSchoolChart = (school) => {
     let chart3 = am4core.create("chartdiv2", am4charts.XYChart);
 
+    let title = chart3.titles.create();
+    title.text = "Grant amounts awarded to " + this.state.university;
+    title.fontSize = 25;
+    title.marginBottom = 30;
+
     // Add data
     chart3.data = school.yearlyList;
     // Create axes
@@ -772,6 +777,11 @@ class App extends Component {
   renderStateChart = (state, stateData) => {
 
     let chart2 = am4core.create("chartdiv2", am4charts.XYChart);
+
+    let title = chart2.titles.create();
+    title.text = "Top 5 Schools in " +this.state.state;
+    title.fontSize = 25;
+    title.marginBottom = 30;
 
     let schoolData = state.schools;
     schoolData.sort(function (a, b) {
@@ -1015,7 +1025,6 @@ class App extends Component {
     let stateCard =
       <div >
         <Card>
-          <label class="cardHeader">Top 5 Schools in {this.state.state} </label>
           <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
         </Card>
         <div style={{ marginTop: '1%' }}>
@@ -1026,7 +1035,6 @@ class App extends Component {
     let topSchoolsCard =
       <div>
         <Card>
-          <label class="cardHeader">{"Grant amounts awarded to " + this.state.university}</label>
           <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
         </Card>
         <div style={{ marginTop: '1%' }}>
