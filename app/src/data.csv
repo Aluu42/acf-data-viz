@@ -2688,7 +2688,6 @@ GrantNum,GrantDate,GrantAmt,Status,Institute ID,Institution,State,Latitude,Longi
 20122439,7/16/12,"$1,000.00",Approved,76651,The Fashion Institute of Design and Merchandising,California,34.0442 N,118.2600 W,Financial Aid,919 South Grand Avenue,"Los Angeles, CA 90015-1421",90015-1421,USA,Austin,Education
 20101902,7/13/10,"$2,000.00",Approved,59301,The George Washington University,District of Columbia,38.8997 N,77.0486 W,Financial Aid Office,"2121 I Street, NW","Washington, DC 20052",20052,USA,No Region,Education
 20101906,7/13/10,"$1,500.00",Approved,59301,The George Washington University,District of Columbia,38.8997 N,77.0486 W,Financial Aid Office,"2121 I Street, NW","Washington, DC 20052",20052,USA,No Region,Education
-20080438,3/5/08,"$5,700.00",Approved,8313,The Griffin School,England,50.9588 N,2.5142 W,710 E. 41st Street,,"Austin, TX 78751-4325",78751-4325,USA,United States,Education
 20111843,6/28/11,$750.00,Approved,34579,The New School,New York,40.7355 N,73.9943 W,Attn: Cashier,72 5th Avenue,"New York, NY 10011",10011,USA,United States,Education
 20151279,6/1/15,"$1,500.00",Approved,91127,The New School,New York,40.7355 N,73.9943 W,"72 Fifth Avenue, 2nd Floor",Attn: Cashiering,"New York, NY 10011",10011,USA,Austin,Education
 20151280,6/1/15,$500.00,Approved,91127,The New School,New York,40.7355 N,73.9943 W,"72 Fifth Avenue, 2nd Floor",Attn: Cashiering,"New York, NY 10011",10011,USA,Austin,Education
@@ -2933,7 +2932,6 @@ GrantNum,GrantDate,GrantAmt,Status,Institute ID,Institution,State,Latitude,Longi
 20112819,10/6/11,$750.00,Approved,24140,University of Southern California,California,34.0224 N,118.2851 W,Financial Aid Office,"700 Childs Way, JHH 325","Los Angeles, CA 90089-0914",90089-0914,USA,Austin,Education
 20121147,3/7/12,$500.00,Approved,24140,University of Southern California,California,34.0224 N,118.2851 W,Financial Aid Office,"700 Childs Way, JHH 325","Los Angeles, CA 90089-0914",90089-0914,USA,Austin,Education
 20150977,5/15/15,$750.00,Approved,24140,University of Southern California,California,34.0224 N,118.2851 W,Financial Aid Office,"700 Childs Way, JHH 325","Los Angeles, CA 90089-0914",90089-0914,USA,Austin,Education
-20131823,5/7/13,$750.00,Approved,67098,University of St. Andrews,Scotland,56.3417 N,2.7928 W,"Old Borough School, Abbey Walk",St Andrews,"Scotland, KY16 9LB",KY16 9LB,USA,Austin,Education
 20131828,5/7/13,$750.00,Approved,82196,University of Tennessee,Tennessee,35.9544 N,83.9295 W,Financial Aid Office,1331 Circle Park Dr,"Knoxville, TN 37916",37916,USA,Austin,Education
 20101647,6/16/10,$150.00,Approved,9099,University of Texas at Arlington,Texas,32.7299 N,97.1140 W,P.O. Box 19199,,"Arlington, TX 76019",76019,USA,United States,Education
 20101648,6/16/10,"$1,250.00",Approved,9099,University of Texas at Arlington,Texas,32.7299 N,97.1140 W,P.O. Box 19199,,"Arlington, TX 76019",76019,USA,United States,Education

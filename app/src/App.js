@@ -616,7 +616,7 @@ class App extends Component {
 
     // Create hover state and set alternative fill color
     let hs = polygonTemplate.states.create("hover");
-    hs.properties.fill = am4core.color("#3c5bdc");
+    hs.properties.fill = am4core.color("#EE4742");
 
     polygonTemplate.events.on("hit", (ev) => {
       let state = ev.target.dataItem.dataContext;
@@ -685,6 +685,8 @@ class App extends Component {
     series.stacked = true;
     series.columns.template.tooltipText = "{categoryX}: [bold]{valueY.total}[/]";
     series.columns.template.fillOpacity = .8;
+    series.stroke = am4core.color("#B4D9DB");
+    series.columns.template.fill = am4core.color("#B4D9DB");
 
     let columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
@@ -723,6 +725,8 @@ class App extends Component {
     series.name = "Visits";
     series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
     series.columns.template.fillOpacity = .8;
+    series.stroke = am4core.color("#B4D9DB");
+    series.columns.template.fill = am4core.color("#B4D9DB");
 
     series.columns.template.events.on("hit", function (ev) {
       console.log("clicked on ", ev.target._dataItem.categories.categoryX);
@@ -780,11 +784,11 @@ class App extends Component {
     // Configure series
     var polygonTemplate = polygonSeries.mapPolygons.template;
     polygonTemplate.tooltipText = "{name}";
-    polygonTemplate.fill = am4core.color("#64B5F6");
+    polygonTemplate.fill = am4core.color("#93A9B7");
 
     // Create hover state and set alternative fill color
     var hs = polygonTemplate.states.create("hover");
-    hs.properties.fill = am4core.color("#455890");
+    hs.properties.fill = am4core.color("#EE4742");
 
     polygonTemplate.events.on("hit", (ev) => {
       ev.target.series.chart.zoomToMapObject(ev.target);
