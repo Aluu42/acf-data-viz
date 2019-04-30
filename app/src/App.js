@@ -1015,16 +1015,13 @@ class App extends Component {
     let mapCard =
       <div>
         <Card>
-          <label class="cardHeader">Click on a state or school for more info</label>
-          <br></br>
-          <FontAwesomeIcon onClick={this.resetState} icon={faArrowLeft} />
+          <div style={{ marginTop: '1%' }}>
+            <button type="button" class="btn btn-dark" onClick={this.resetState}>Return to United States Map</button>
+          </div>
           <CardMedia>
             <div id="chartdiv" style={{ width: "100%", height: "400px" }}></div>
           </CardMedia>
         </Card>
-        {/* <div style={{ marginTop: '1%' }}>
-          <button type="button" class="btn btn-dark" onClick={this.resetState}>Return to United States Map</button>
-        </div> */}
       </div>;
 
     return (
@@ -1040,16 +1037,13 @@ class App extends Component {
 
           <div class="cityInfo floatright">
             <div style={{ marginTop: '26.5%', marginRight: '5%' }}>
-              {/* {stateCard} */}
               <div>
                 <Card>
-                  <br></br>
-                  <FontAwesomeIcon onClick={this.back} icon={faArrowLeft} />
+                  <div style={{ marginTop: '1%' }}>
+                    <button type="button" class="btn btn-dark" onClick={this.back}>Back</button>
+                  </div>
                   <div id="chartdiv2" style={{ width: "100%", height: "400px" }}></div>
                 </Card>
-                {/* <div style={{ marginTop: '1%' }}>
-                  <button type="button" class="btn btn-dark" onClick={this.back}>Back</button>
-                </div> */}
               </div>
             </div>
           </div>
