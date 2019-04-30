@@ -14,10 +14,6 @@ import Banner from 'react-js-banner';
 import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import 'font-awesome/css/font-awesome.min.css';
 
 import AL from "@amcharts/amcharts4-geodata/region/usa/alLow";
 import AK from "@amcharts/amcharts4-geodata/region/usa/akLow";
@@ -87,17 +83,15 @@ let statesArray = [];
 let schoolsArray = [];
 const schoolsMap = new Map();
 let sData = [];
-var schoolToState = {};
-var stateToIndex = {};
 
 am4core.useTheme(am4themes_animated);
 const initialState = {
-  visible: false,
-  data: null,
-  university: "...",
-  grantamt: "",
-  state: "...",
-};
+      visible: false,
+      data: null,
+      university: "",
+      grantamt: "",
+      bannerCSS: { color: "#FFF", backgroundColor: "#282c34", fontSize: 500 },
+    };
 class App extends Component {
   constructor(props) {
     super(props);
@@ -106,13 +100,12 @@ class App extends Component {
     this.renderSchoolData = this.renderSchoolData.bind(this);
     this.loadData = this.loadData.bind(this);
     this.dataCallback = this.dataCallback.bind(this);
-    this.renderStateChart = this.renderStateChart.bind(this);
+    this.renderChart = this.renderChart.bind(this);
     this.renderSchoolChart = this.renderSchoolChart.bind(this);
   }
 
-  resetState = () => {
-    statesArray = Array.from(new Set(statesArray));
-    this.renderMap();
+  resetState=()=>{
+    window.location.reload();
   }
 
   dataCallback = (results, file) => {
@@ -123,15 +116,8 @@ class App extends Component {
     let currState = zipcodes.lookup(results.data[0].PayeeZip).state;
     let yearByYearGrant = [];
 
-
-
     var i = 0;
     while (i < results.data.length) {
-      //  @@@@@@@@@@@@@@
-      //console.log(currSchool);
-      //console.log(currState);
-      schoolToState[currSchool] = currState.substring(3, 5);
-
 
       let grantAmount = results.data[i].GrantAmt.substring(1);
       grantAmount = grantAmount.replace(',', "");
@@ -167,21 +153,9 @@ class App extends Component {
         }
 
         totalGrant += grantAmount;
-        var exists = false;
-        var j;
         var currYear = "20" + results.data[i].GrantDate.substring(results.data[i].GrantDate.length - 2);
-        for (j = 0; j < yearByYearGrant.length; j++) {
-          if (yearByYearGrant[j].year == currYear) {
-            yearByYearGrant[j].total += 1;
-            yearByYearGrant[j].grantAmount += grantAmount;
-            exists = true;
-          }
-        }
-        if (!exists) {
-          var yearGrant = { year: currYear, total: 1, grantAmount: grantAmount };
-          yearByYearGrant.push(yearGrant);
-        }
-
+        var yearGrant = { year: currYear, grantAmount: grantAmount };
+        yearByYearGrant.push(yearGrant);
         i++;
       }
       else {
@@ -196,13 +170,13 @@ class App extends Component {
           "yearlyList": yearByYearGrant,
         });
         currSchool = results.data[i].Institution;
-        schoolsArray.push(currSchool);
         yearByYearGrant = [];
+        schoolsArray.push(currSchool);
+
         totalGrant = 0;
       }
     }
 
-    //  map the school to its state
     let index;
     for (index = 0; index < dataObjects.length; index++) {
       schoolsMap.set(dataObjects[index].title, dataObjects[index].totalGrant);
@@ -238,11 +212,10 @@ class App extends Component {
     chart.geodata = am4geodata_usaLow;
 
     // Set projection
-    chart.projection = new am4maps.projections.AlbersUsa();
+    chart.projection = new am4maps.projections.Albers();
 
     chart.zoomControl = new am4maps.ZoomControl();
     chart.zoomControl.align = "left";
-    chart.zoomControl.height = 100;
     chart.centerMap = true;
 
     // Create map polygon series
@@ -258,366 +231,302 @@ class App extends Component {
         value: 4447100,
         schools: [],
         stateMap: AL,
-        full: "Alabama",
       },
       {
         id: "US-AK",
         value: 626932,
         schools: [],
         stateMap: AK,
-        full: "Alaska",
       },
       {
         id: "US-AZ",
         value: 5130632,
         schools: [],
         stateMap: AZ,
-        full: "Arizona",
       },
       {
         id: "US-AR",
         value: 2673400,
         schools: [],
         stateMap: AR,
-        full: "Arkansas",
       },
       {
         id: "US-CA",
         value: 33871648,
         schools: [],
         stateMap: CA,
-        full: "California",
       },
       {
         id: "US-CO",
         value: 4301261,
         schools: [],
         stateMap: CO,
-        full: "Colorado",
       },
       {
         id: "US-CT",
         value: 3405565,
         schools: [],
         stateMap: CT,
-        full: "Connecticut",
       },
       {
         id: "US-DE",
         value: 783600,
         schools: [],
         stateMap: DE,
-        full: "Delaware",
       },
       {
         id: "US-FL",
         value: 15982378,
         schools: [],
         stateMap: FL,
-        full: "Florida",
       },
       {
         id: "US-GA",
         value: 8186453,
         schools: [],
         stateMap: GA,
-        full: "Georgia",
       },
       {
         id: "US-HI",
         value: 1211537,
         schools: [],
         stateMap: HI,
-        full: "Hawaii",
       },
       {
         id: "US-ID",
         value: 1293953,
         schools: [],
         stateMap: ID,
-        full: "Idaho",
       },
       {
         id: "US-IL",
         value: 12419293,
         schools: [],
         stateMap: IL,
-        full: "Illinois",
       },
       {
         id: "US-IN",
         value: 6080485,
         schools: [],
         stateMap: IN,
-        full: "Indiana",
       },
       {
         id: "US-IA",
         value: 2926324,
         schools: [],
         stateMap: IA,
-        full: "Iowa",
       },
       {
         id: "US-KS",
         value: 2688418,
         schools: [],
         stateMap: KS,
-        full: "Kansas",
       },
       {
         id: "US-KY",
         value: 4041769,
         schools: [],
         stateMap: KY,
-        full: "Kentucky",
       },
       {
         id: "US-LA",
         value: 4468976,
         schools: [],
         stateMap: LA,
-        full: "Louisiana",
       },
       {
         id: "US-ME",
         value: 1274923,
         schools: [],
         stateMap: ME,
-        full: "Maine",
       },
       {
         id: "US-MD",
         value: 5296486,
         schools: [],
         stateMap: MD,
-        full: "Maryland",
       },
       {
         id: "US-MA",
         value: 6349097,
         schools: [],
         stateMap: MA,
-        full: "Massachusetts",
       },
       {
         id: "US-MI",
         value: 9938444,
         schools: [],
         stateMap: MI,
-        full: "Michigan",
       },
       {
         id: "US-MN",
         value: 4919479,
         schools: [],
         stateMap: MN,
-        full: "Minnesota",
       },
       {
         id: "US-MS",
         value: 2844658,
         schools: [],
         stateMap: MS,
-        full: "Mississippi",
       },
       {
         id: "US-MO",
         value: 5595211,
         schools: [],
         stateMap: MO,
-        full: "Missouri",
       },
       {
         id: "US-MT",
         value: 902195,
         schools: [],
         stateMap: MT,
-        full: "Montana",
       },
       {
         id: "US-NE",
         value: 1711263,
         schools: [],
         stateMap: NE,
-        full: "Nebraska",
       },
       {
         id: "US-NV",
         value: 1998257,
         schools: [],
         stateMap: NV,
-        full: "Nevada",
       },
       {
         id: "US-NH",
         value: 1235786,
         schools: [],
         stateMap: NH,
-        full: "New Hampshire",
       },
       {
         id: "US-NJ",
         value: 8414350,
         schools: [],
         stateMap: NJ,
-        full: "New Jersey",
       },
       {
         id: "US-NM",
         value: 1819046,
         schools: [],
         stateMap: NM,
-        full: "New Mexico",
       },
       {
         id: "US-NY",
         value: 18976457,
         schools: [],
         stateMap: NY,
-        full: "New York",
       },
       {
         id: "US-NC",
         value: 8049313,
         schools: [],
         stateMap: NC,
-        full: "North Carolina",
       },
       {
         id: "US-ND",
         value: 642200,
         schools: [],
         stateMap: ND,
-        full: "North Dakota",
       },
       {
         id: "US-OH",
         value: 11353140,
         schools: [],
         stateMap: OH,
-        full: "Ohio",
       },
       {
         id: "US-OK",
         value: 3450654,
         schools: [],
         stateMap: OK,
-        full: "Oklahoma",
       },
       {
         id: "US-OR",
         value: 3421399,
         schools: [],
         stateMap: OR,
-        full: "Oregon",
       },
       {
         id: "US-PA",
         value: 12281054,
         schools: [],
         stateMap: PA,
-        full: "Pennsylvania",
       },
       {
         id: "US-RI",
         value: 1048319,
         schools: [],
         stateMap: RI,
-        full: "Rhode Island",
       },
       {
         id: "US-SC",
         value: 4012012,
         schools: [],
         stateMap: SC,
-        full: "South Carolina",
       },
       {
         id: "US-SD",
         value: 754844,
         schools: [],
         stateMap: SD,
-        full: "South Dakota",
       },
       {
         id: "US-TN",
         value: 5689283,
         schools: [],
         stateMap: TN,
-        full: "Tennessee",
       },
       {
         id: "US-TX",
         value: 20851820,
         schools: [],
         stateMap: TX,
-        full: "Texas",
       },
       {
         id: "US-UT",
         value: 2233169,
         schools: [],
         stateMap: UT,
-        full: "Utah",
       },
       {
         id: "US-VT",
         value: 608827,
         schools: [],
         stateMap: VT,
-        full: "Vermont",
       },
       {
         id: "US-VA",
         value: 7078515,
         schools: [],
         stateMap: VA,
-        full: "Virginia",
       },
       {
         id: "US-WA",
         value: 5894121,
         schools: [],
         stateMap: WA,
-        full: "Washington",
       },
       {
         id: "US-WV",
         value: 1808344,
         schools: [],
         stateMap: WV,
-        full: "West Virginia",
       },
       {
         id: "US-WI",
         value: 5363675,
         schools: [],
         stateMap: WI,
-        full: "Wisconsin",
       },
       {
         id: "US-WY",
         value: 493782,
         schools: [],
         stateMap: WY,
-        full: "Wyoming",
-      },
-      {
-        id: "US-WY",
-        value: 493782,
-        schools: [],
-        stateMap: WY,
-        full: "Wyoming",
       }
     ];
-
-    //  map the state to its index in sData
-    var index;
-    for (index = 0; index < polygonSeries.data.length; index++) {
-      let state = polygonSeries.data[index].id.substring(3, 5);
-      stateToIndex[state] = index;
-    }
 
     let minValue = 0;
     let maxValue = 0;
@@ -639,7 +548,6 @@ class App extends Component {
       // put sum in value of data array
       polygonSeries.data[i].value = sum;
       statesArray.push(polygonSeries.data[i].id.substring(3));
-
       let stateString = polygonSeries.data[i].id.substring(3);
       statesMap.set(stateString, sum);
 
@@ -651,7 +559,6 @@ class App extends Component {
       }
     }
     sData = polygonSeries.data;
-    statesArray = Array.from(new Set(statesArray));
 
     polygonSeries.heatRules.push({
       property: "fill",
@@ -665,11 +572,10 @@ class App extends Component {
     // Set up heat legend
     let heatLegend = chart.createChild(am4maps.HeatLegend);
     heatLegend.series = polygonSeries;
-    heatLegend.align = "right";
-    heatLegend.dx = 25;
+    heatLegend.align = "left";
     heatLegend.valign = "top";
-    heatLegend.width = am4core.percent(25);
-    heatLegend.marginRight = am4core.percent(9);
+    heatLegend.width = am4core.percent(15);
+    heatLegend.marginRight = am4core.percent(4);
     heatLegend.minValue = 0;
     heatLegend.maxValue = 40000000;
 
@@ -679,7 +585,7 @@ class App extends Component {
     minRange.label.text = "$0";
     let maxRange = heatLegend.valueAxis.axisRanges.create();
     maxRange.value = heatLegend.maxValue;
-    maxRange.label.text = "$4m";
+    maxRange.label.text = "$4 million";
 
     // Blank out internal heat legend value axis labels
     heatLegend.valueAxis.renderer.labels.template.adapter.add("text", function (labelText) {
@@ -694,12 +600,18 @@ class App extends Component {
 
     // Create hover state and set alternative fill color
     let hs = polygonTemplate.states.create("hover");
-    hs.properties.fill = am4core.color("#EE4742");
+    hs.properties.fill = am4core.color("#3c5bdc");
 
     polygonTemplate.events.on("hit", (ev) => {
+      // ev.target.series.chart.zoomToMapObject(ev.target);
+      // console.log(ev.target);
       let state = ev.target.dataItem.dataContext;
       this.renderState(state);
-      this.renderStateChart(state, polygonSeries.data);
+      // console.log(state);
+      // this.showSchoolsByState(state.id.substring(3));
+      //console.log(state);
+      //this.showSchoolsByState(state.id.substring(3));
+      this.renderChart(state, polygonSeries.data);
     });
 
     let imageSeries = chart.series.push(new am4maps.MapImageSeries());
@@ -717,10 +629,6 @@ class App extends Component {
     circle.tooltipText = "{title}: ${totalGrant}";
 
     circle.events.on("hit", function (ev) {
-      let context = ev.target.dataItem.dataContext;
-
-      var state = schoolToState[context.title];
-      var index = stateToIndex[state];
       let school = ev.target.dataItem.dataContext.title;
       let grant = ev.target.dataItem.dataContext.totalGrant;
       this.setState({
@@ -729,7 +637,6 @@ class App extends Component {
         totalGrant: "$" + grant,
       });
       this.renderSchoolChart(ev.target.dataItem.dataContext);
-      this.renderState(sData[index]);
     }, this);
 
   }
@@ -741,59 +648,54 @@ class App extends Component {
   }
 
   renderSchoolChart = (school) => {
-    let chart3 = am4core.create("chartdiv2", am4charts.XYChart);
-
-    let title = chart3.titles.create();
-    title.text = "Grant amounts awarded to " + school.title;
-    title.fontSize = 15;
-    title.marginBottom = 30;
+    // state = state.id.substring(3);
+    let chart3 = am4core.create("chartdiv3", am4charts.XYChart);
 
     // Add data
     chart3.data = school.yearlyList;
+    console.log(school);
     // Create axes
     let categoryAxis = chart3.xAxes.push(new am4charts.CategoryAxis());
     categoryAxis.dataFields.category = "year";
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.minGridDistance = 30;
 
+
+    categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
+      if (target.dataItem && target.dataItem.index & 2 == 2) {
+        return dy + 25;
+      }
+      return dy;
+    });
     categoryAxis.renderer.labels.template.fontSize = 10;
-    // categoryAxis.renderer.labels.template.horizontalCenter = "right";
-    // categoryAxis.renderer.labels.template.verticalCenter = "middle";
-    // categoryAxis.renderer.labels.template.rotation = 270;
+    categoryAxis.renderer.labels.template.horizontalCenter = "right";
+    categoryAxis.renderer.labels.template.verticalCenter = "middle";
+    categoryAxis.renderer.labels.template.rotation = 270;
 
     let valueAxis = chart3.yAxes.push(new am4charts.ValueAxis());
+
     // Create series
     let series = chart3.series.push(new am4charts.ColumnSeries());
     series.dataFields.valueY = "grantAmount";
-    series.dataFields.value = "total"
     series.dataFields.categoryX = "year";
     series.name = "Year";
-    series.stacked = true;
-    series.columns.template.tooltipText = "Total: [bold]${valueY}[/]\nGrants: [bold]{total}";
+    series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
     series.columns.template.fillOpacity = .8;
-    series.stroke = am4core.color("#B4D9DB");
-    series.columns.template.fill = am4core.color("#B4D9DB");
 
     let columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
     columnTemplate.strokeOpacity = 1;
-
   }
 
-  renderStateChart = (state, stateData) => {
+  renderChart = (state, stateData) => {
+    console.log(state);
 
     let chart2 = am4core.create("chartdiv2", am4charts.XYChart);
-
-    let title = chart2.titles.create();
-    title.text = "Top 5 Schools in " +  state.name;
-    title.fontSize = 15;
-    title.marginBottom = 30;
 
     let schoolData = state.schools;
     schoolData.sort(function (a, b) {
       return parseInt(b.totalGrant) - parseInt(a.totalGrant);
     });
-
     // Add data
     chart2.data = schoolData.slice(0, 5);
 
@@ -803,9 +705,17 @@ class App extends Component {
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.minGridDistance = 30;
 
+
+    categoryAxis.renderer.labels.template.adapter.add("dy", function (dy, target) {
+      if (target.dataItem && target.dataItem.index & 2 == 2) {
+        return dy + 25;
+      }
+      return dy;
+    });
     categoryAxis.renderer.labels.template.fontSize = 10;
-    categoryAxis.renderer.labels.template.wrap = true;
-    categoryAxis.renderer.labels.template.maxWidth = 75;
+    categoryAxis.renderer.labels.template.horizontalCenter = "right";
+    categoryAxis.renderer.labels.template.verticalCenter = "middle";
+    categoryAxis.renderer.labels.template.rotation = 270;
 
     let valueAxis = chart2.yAxes.push(new am4charts.ValueAxis());
 
@@ -816,23 +726,16 @@ class App extends Component {
     series.name = "Visits";
     series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
     series.columns.template.fillOpacity = .8;
-    series.stroke = am4core.color("#B4D9DB");
-    series.columns.template.fill = am4core.color("#B4D9DB");
 
-    series.columns.template.events.on("hit", function (ev) {
+    series.columns.template.events.on("hit", function(ev) {
       console.log("clicked on ", ev.target._dataItem.categories.categoryX);
       let school = dataObjects.filter((obj) => {
-        if (obj.title === ev.target._dataItem.categories.categoryX) {
-          return obj;
-        }
-      });
-      this.setState({
-        visible: true,
-        university: school[0].title + ":",
-        totalGrant: "$" + school[0].totalGrant,
+      if (obj.title === ev.target._dataItem.categories.categoryX) {
+        return obj;
+      }
       });
       this.renderSchoolChart(school[0]);
-    }, this);
+      }, this);
 
     let columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
@@ -852,15 +755,8 @@ class App extends Component {
   renderState = (state) => {
     var chart = am4core.create("chartdiv", am4maps.MapChart);
     console.log(state);
-
-    this.setState({ state: state.name });
     // Set map definition
     chart.geodata = state.stateMap;
-
-    let title = chart.titles.create();
-    // title.text = "Click on a state or school for more info";
-    title.fontSize = 25;
-    title.marginBottom = 30;
 
     // Set projection
     chart.projection = new am4maps.projections.Miller();
@@ -876,16 +772,15 @@ class App extends Component {
 
     chart.zoomControl = new am4maps.ZoomControl();
     chart.zoomControl.align = "left";
-    chart.zoomControl.height = 100;
 
     // Configure series
     var polygonTemplate = polygonSeries.mapPolygons.template;
     polygonTemplate.tooltipText = "{name}";
-    polygonTemplate.fill = am4core.color("#93A9B7");
+    polygonTemplate.fill = am4core.color("#476b82");
 
     // Create hover state and set alternative fill color
     var hs = polygonTemplate.states.create("hover");
-    hs.properties.fill = am4core.color("#EE4742");
+    hs.properties.fill = am4core.color("#3c5bdc");
 
     polygonTemplate.events.on("hit", (ev) => {
       ev.target.series.chart.zoomToMapObject(ev.target);
@@ -919,7 +814,6 @@ class App extends Component {
       });
       this.renderSchoolChart(ev.target.dataItem.dataContext);
     }, this);
-
   }
 
   showSchools = (selected) => {
@@ -927,6 +821,7 @@ class App extends Component {
     let yearlyList;
     dataObjects.filter((obj) => {
       if (obj.title === selected.toString()) {
+        console.log(obj)
         schoolGrant = obj.totalGrant;
         yearlyList = obj.yearlyList;
         return obj.totalGrant;
@@ -959,95 +854,71 @@ class App extends Component {
     });
   }
 
-  back = () => {
-    let state = sData.filter((obj) => {
-      if (obj.full === this.state.state.toString()) {
-        return obj;
-      }
-    });
-    if (state[0] != undefined)
-      this.renderStateChart(state[0], []);
-  }
-
   render() {
+    let cityInfo;
+    if (this.state.visible) {
+      cityInfo = <Card><text>
+      <div> {this.state.university} </div>
+      <div> Total Grants: {this.state.totalGrant}</div>
+      Historical Scholarship Graph: </text><br /></Card>;
+    }
 
-    let searchBars =
-      <div class="searchBars" style={{ marginLeft: '5%', marginRight: '5%', marginTop: '3.5%' }} >
-        <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
-          if (selected.length === 0) {
-            this.setState({ visible: false, university: "", totalGrant: "" });
-          }
-          else {
-            let state = sData.filter((obj) => {
-              if (obj.id.substring(3) === selected.toString()) {
-                return obj;
-              }
-            });
-            this.renderState(state[0]);
-            this.renderStateChart(state[0], []);
-          }
-        }} options={statesArray} />
-        <Typeahead id="search-bar" placeholder="search by school" onChange={(selected) => {
-          if (selected.length === 0) {
-            this.setState({ visible: false, university: "", totalGrant: "" });
-          }
-          else {
-            this.showSchools(selected);
-            let school = dataObjects.filter((obj) => {
-              if (obj.title === selected.toString()) {
-                return obj;
-              }
-            });
-            this.setState({
-              visible: true,
-              university: selected.toString() + ": ",
-            });
-
-            //  change the current state displayed to the state this school belongs to
-            var state = schoolToState[selected.toString()];
-            var index = stateToIndex[state];
-            this.renderState(sData[index]);
-            this.renderSchoolChart(school[0]);
-          }
-        }} options={schoolsArray} />
-      </div>;
-
-    let mapCard =
-      <div>
-        <Card>
-          <CardMedia>
-            <div id="chartdiv" style={{ width: "100%", height: '50vh'}}></div>
-          </CardMedia>
-        </Card>
-        <div style={{ marginTop: '1%' }}>
-            <button type="button" class="btn btn-dark" onClick={this.resetState}>Return to United States Map</button>
-          </div>
-      </div>;
 
     return (
       <div class="wrap">
         <div class="contents">
           <div id="bannerimage"></div>
-          <div class="floatleft" >
-            {searchBars}
-            <div style={{ marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%' }}>
-              {mapCard}
+          <div class="floatleft">
+            <div style={{marginLeft: '5%', marginRight: '5%', marginTop: '5%', marginBottom: '5%'}}>
+              <Card>
+                <CardMedia>
+                  <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
+                  {/* <label class="infoText">Click on a state to view more info</label> */}
+                </CardMedia>
+              </Card>
+            </div>
+            <div class="searchBars">
+              <Typeahead id="search-bar" placeholder="search by state" onChange={(selected) => {
+                if (selected.length === 0) {
+                  this.setState({ visible: false, university: "", totalGrant: "" });
+                }
+                else {
+                  let state = sData.filter((obj) => {
+                    if (obj.id.substring(3) === selected.toString()) {
+                      return obj;
+                    }
+                  });
+                  this.renderState(state[0]);
+                  this.renderChart(state[0], []);
+                }
+              }} options={statesArray} />
+              <Typeahead id="search-bar" placeholder="search by school" onChange={(selected) => {
+                if (selected.length === 0) {
+                  this.setState({ visible: false, university: "", totalGrant: "" });
+                }
+                else {
+                  this.showSchools(selected);
+                  let school = dataObjects.filter((obj) => {
+                    if (obj.title === selected.toString()) {
+                      return obj;
+                    }
+                  });
+                  this.renderSchoolChart(school[0]);
+                }
+              }} options={schoolsArray} />
             </div>
           </div>
-
           <div class="cityInfo floatright">
-            <div style={{ marginTop: '25.5%', marginRight: '5%'}}>
-              <div>
-                <Card>
-                  <CardMedia>
-                    <div id="chartdiv2" style={{ width: "100%", height: '55vh' }}></div>
-                  </CardMedia>
-                </Card>
-                <div style={{ marginTop: '1%' }}>
-                  <button type="button" class="btn btn-dark" onClick={this.back}>View State Chart</button>
-                </div>
-              </div>
-            </div>
+            <Card>
+              <div id="chartdiv2" style={{ width: "100%", height: "500px" }}></div>
+            </Card>
+            {cityInfo}
+            <Card>
+              <div id="chartdiv3" style={{ width: "100%", height: "500px" }}></div>
+            </Card>
+          </div>
+          <div>
+            <button onClick={this.resetState}>reset</button>
           </div>
         </div>
       </div>
