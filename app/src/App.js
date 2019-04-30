@@ -139,7 +139,7 @@ class App extends Component {
       grantAmount = parseFloat(grantAmount);
 
       if (currSchool === results.data[i].Institution) {
-        
+
         numScholarships++;
         // console.log("num sch " + numScholarships);
         totalGrantAmount+=grantAmount;
@@ -982,23 +982,27 @@ class App extends Component {
     centerText.className += " general-stats-div";
 
     var h = document.createElement("H1");
-    h.className+= " general-stats";               
-    var t = document.createTextNode("ACF Scholarships");  
-    h.appendChild(t); 
+    h.className+= " general-stats";
+    var t = document.createTextNode("ACF Scholarships");
+    h.appendChild(t);
 
     var h2 = document.createElement("H5");
-    h2.className+= " general-stats";                            
-    var t2 = document.createTextNode(Math.trunc(totalGrantAmount) + " total dollars awarded");  
+    h2.className+= " general-stats";
+    var roundedTGA = Math.trunc(totalGrantAmount);
+    var tga = roundedTGA.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    var t2 = document.createTextNode("$" + tga + " awarded");
     h2.appendChild(t2);
 
     var h3 = document.createElement("H5");
-    h3.className+= " general-stats";                            
-    var t3 = document.createTextNode(numScholarships + " total scholarships awarded");  
+    h3.className+= " general-stats";
+    var nS = numScholarships.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    var t3 = document.createTextNode(nS + " total scholarships awarded");
     h3.appendChild(t3);
 
     var h4 = document.createElement("H5");
-    h4.className+= " general-stats";                            
-    var t4 = document.createTextNode(schoolsArray.length + " US schools where scholarships went");  
+    h4.className+= " general-stats";
+    var sAL = schoolsArray.length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    var t4 = document.createTextNode(sAL + " US schools");
     h4.appendChild(t4);
 
     centerText.appendChild(h);
