@@ -1061,11 +1061,11 @@ class App extends Component {
 
     let mapCard =
       <div>
-        <Card>
-          <CardMedia>
+        <div class="mdc-card">
+          {/* <CardMedia> */}
             <div id="chartdiv" style={{ width: "100%", height: '50vh'}}></div>
-          </CardMedia>
-        </Card>
+          {/* </CardMedia> */}
+        </div>
         <div style={{ marginTop: '1%' }}>
             <button type="button" class="btn btn-dark" onClick={this.resetState}>Return to United States Map</button>
           </div>
@@ -1087,11 +1087,11 @@ class App extends Component {
           <div class="cityInfo floatright">
             <div style={{ marginTop: '25.8%', marginRight: '5%'}}>
               <div>
-                <Card>
-                  <CardMedia>
+                <div class="mdc-card">
+                  {/* <CardMedia> */}
                     <div id="chartdiv2" style={{ width: "100%", height: '50vh' }}></div>
-                  </CardMedia>
-                </Card>
+                  {/* </CardMedia> */}
+                </div>
                 <div style={{ marginTop: '1%' }}>
                   <button type="button" class="btn btn-dark" onClick={this.back}>View {state} Chart</button>
                 </div>
