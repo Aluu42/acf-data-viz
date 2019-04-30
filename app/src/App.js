@@ -235,7 +235,7 @@ class App extends Component {
     chart.geodata = am4geodata_usaLow;
 
     // Set projection
-    chart.projection = new am4maps.projections.Albers();
+    chart.projection = new am4maps.projections.AlbersUsa();
 
     chart.zoomControl = new am4maps.ZoomControl();
     chart.zoomControl.align = "left";
@@ -605,11 +605,11 @@ class App extends Component {
     // Set up heat legend
     let heatLegend = chart.createChild(am4maps.HeatLegend);
     heatLegend.series = polygonSeries;
-    heatLegend.align = "left";
+    heatLegend.align = "right";
     heatLegend.dx = 25;
     heatLegend.valign = "top";
     heatLegend.width = am4core.percent(25);
-    heatLegend.marginRight = am4core.percent(4);
+    heatLegend.marginRight = am4core.percent(9);
     heatLegend.minValue = 0;
     heatLegend.maxValue = 40000000;
 
@@ -619,7 +619,7 @@ class App extends Component {
     minRange.label.text = "$0";
     let maxRange = heatLegend.valueAxis.axisRanges.create();
     maxRange.value = heatLegend.maxValue;
-    maxRange.label.text = "$4 million";
+    maxRange.label.text = "$4m";
 
     // Blank out internal heat legend value axis labels
     heatLegend.valueAxis.renderer.labels.template.adapter.add("text", function (labelText) {
@@ -931,7 +931,7 @@ class App extends Component {
 
     let mapCard =
       <div>
-        <Card styles={{ card: { backgroundColor: 'red' }}}>
+        <Card>
           <label class="cardHeader">Click on a state or school for more info</label>
           <CardMedia>
             <div id="chartdiv" style={{ width: "100%", height: "400px" }}></div>
