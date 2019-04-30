@@ -228,7 +228,8 @@ class App extends Component {
     chart.projection = new am4maps.projections.Albers();
 
     chart.zoomControl = new am4maps.ZoomControl();
-    chart.zoomControl.align = "right";
+    chart.zoomControl.align = "left";
+    chart.zoomControl.height = 100;
     chart.centerMap = true;
 
     // Create map polygon series
@@ -780,6 +781,7 @@ class App extends Component {
 
     chart.zoomControl = new am4maps.ZoomControl();
     chart.zoomControl.align = "left";
+    chart.zoomControl.height = 100;
 
     // Configure series
     var polygonTemplate = polygonSeries.mapPolygons.template;
