@@ -229,6 +229,9 @@ class App extends Component {
 
   renderMap() {
     // Themes begin
+    if(chart != null){
+      chart.dispose();
+    }
     am4core.useTheme(am4themes_animated);
     // Themes end
 
@@ -742,6 +745,10 @@ class App extends Component {
   }
 
   renderSchoolChart = (school) => {
+
+    if(chart3 != null){
+      chart3.dispose();
+    }
     chart3 = am4core.create("chartdiv2", am4charts.XYChart);
 
     let title = chart3.titles.create();
@@ -782,6 +789,10 @@ class App extends Component {
   }
 
   renderStateChart = (state, stateData) => {
+
+    if(chart2 != null){
+      chart2.dispose();
+    }
 
     chart2 = am4core.create("chartdiv2", am4charts.XYChart);
 
