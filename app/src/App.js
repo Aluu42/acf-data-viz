@@ -657,10 +657,10 @@ class App extends Component {
     polygonSeries.heatRules.push({
       property: "fill",
       target: polygonSeries.mapPolygons.template,
-      min: chart.colors.getIndex(1).brighten(1),
+      min: chart.colors.getIndex(1).brighten(2),
       max: chart.colors.getIndex(1).brighten(-0.3),
       minValue: minValue,
-      maxValue: maxValue / 100,
+      maxValue: maxValue / 42,
     });
 
     // Set up heat legend
