@@ -662,10 +662,10 @@ class App extends Component {
     polygonSeries.heatRules.push({
       property: "fill",
       target: polygonSeries.mapPolygons.template,
-      min: chart.colors.getIndex(1).brighten(1),
+      min: chart.colors.getIndex(1).brighten(2),
       max: chart.colors.getIndex(1).brighten(-0.3),
       minValue: minValue,
-      maxValue: maxValue / 100,
+      maxValue: maxValue / 45,
     });
 
     // Set up heat legend
@@ -678,6 +678,7 @@ class App extends Component {
     heatLegend.marginRight = am4core.percent(9);
     heatLegend.minValue = 0;
     heatLegend.maxValue = 40000000;
+
 
     // Set up custom heat map legend labels using axis ranges
     let minRange = heatLegend.valueAxis.axisRanges.create();
