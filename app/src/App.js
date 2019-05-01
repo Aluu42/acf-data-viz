@@ -7,17 +7,9 @@ import am4geodata_usaLow from "@amcharts/amcharts4-geodata/usaLow";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import Papa from 'papaparse';
 import zipcodes from 'zipcodes';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Banner from 'react-js-banner';
 import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import 'font-awesome/css/font-awesome.min.css';
 
 import AL from "@amcharts/amcharts4-geodata/region/usa/alLow";
 import AK from "@amcharts/amcharts4-geodata/region/usa/akLow";
@@ -91,6 +83,9 @@ var schoolToState = {};
 var stateToIndex = {};
 var numScholarships = 0;
 var totalGrantAmount = 0;
+let chart = null;
+let chart2 = null;
+let chart3 = null;
 
 am4core.useTheme(am4themes_animated);
 const initialState = {
@@ -238,7 +233,7 @@ class App extends Component {
     // Themes end
 
     // Create map instance
-    let chart = am4core.create("chartdiv", am4maps.MapChart);
+    chart = am4core.create("chartdiv", am4maps.MapChart);
 
     // Set map definition
     chart.geodata = am4geodata_usaLow;
@@ -662,10 +657,10 @@ class App extends Component {
     polygonSeries.heatRules.push({
       property: "fill",
       target: polygonSeries.mapPolygons.template,
-      min: chart.colors.getIndex(1).brighten(2),
+      min: chart.colors.getIndex(1).brighten(1),
       max: chart.colors.getIndex(1).brighten(-0.3),
       minValue: minValue,
-      maxValue: maxValue / 45,
+      maxValue: maxValue / 100,
     });
 
     // Set up heat legend
@@ -678,7 +673,6 @@ class App extends Component {
     heatLegend.marginRight = am4core.percent(9);
     heatLegend.minValue = 0;
     heatLegend.maxValue = 40000000;
-
 
     // Set up custom heat map legend labels using axis ranges
     let minRange = heatLegend.valueAxis.axisRanges.create();
@@ -748,7 +742,7 @@ class App extends Component {
   }
 
   renderSchoolChart = (school) => {
-    let chart3 = am4core.create("chartdiv2", am4charts.XYChart);
+    chart3 = am4core.create("chartdiv2", am4charts.XYChart);
 
     let title = chart3.titles.create();
     title.text = "Grant amounts awarded to " + school.title;
@@ -789,7 +783,7 @@ class App extends Component {
 
   renderStateChart = (state, stateData) => {
 
-    let chart2 = am4core.create("chartdiv2", am4charts.XYChart);
+    chart2 = am4core.create("chartdiv2", am4charts.XYChart);
 
     let title = chart2.titles.create();
     title.text = "Top 5 Schools in " +  state.name;
@@ -857,8 +851,8 @@ class App extends Component {
   }
 
   renderState = (state) => {
-    var chart = am4core.create("chartdiv", am4maps.MapChart);
-    console.log(state);
+
+    chart = am4core.create("chartdiv", am4maps.MapChart);
 
     this.setState({ state: state.name });
     // Set map definition
