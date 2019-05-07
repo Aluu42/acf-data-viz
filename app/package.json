@@ -5,12 +5,10 @@
   "dependencies": {
     "@amcharts/amcharts4": "^4.3.5",
     "@amcharts/amcharts4-geodata": "^4.1.4",
-    "@fortawesome/fontawesome-svg-core": "^1.2.17",
-    "@fortawesome/free-solid-svg-icons": "^5.8.1",
-    "@fortawesome/react-fontawesome": "^0.1.4",
     "@material-ui/core": "^3.9.3",
     "@material/card": "^2.0.0",
     "bootstrap": "^4.3.1",
+    "concurrently": "^4.1.0",
     "font-awesome": "^4.7.0",
     "papaparse": "^4.6.3",
     "react": "^16.8.6",
@@ -22,18 +20,28 @@
     "zipcodes": "^8.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "app-install": "npm install --prefix app",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "app": "npm start --prefix app",
+    "dev": "concurrently \"npm run server\" \"npm run app\"",
+    "heroku-postbuild": "npm install --only=dev && npm install && npm run build"
+  },
+  "engines": {
+    "node": "^10.15.1",
+    "npm": "^6.4.1"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
+  "proxy": "http://localhost:5000",
   "browserslist": [
     ">0.2%",
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@babel/code-frame": "^7.0.0"
+  }
 }

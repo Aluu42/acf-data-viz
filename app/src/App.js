@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-import * as am4core from "@amcharts/amcharts4/core";
-import * as am4maps from "@amcharts/amcharts4/maps";
-import * as am4charts from "@amcharts/amcharts4/charts";
+import { useTheme, create, percent, Circle, color } from "@amcharts/amcharts4/core";
+import { MapChart, MapImageSeries, MapPolygonSeries, HeatLegend, ZoomControl, projections } from "@amcharts/amcharts4/maps";
+import { XYChart, CategoryAxis, ColumnSeries, ValueAxis } from "@amcharts/amcharts4/charts";
 import am4geodata_usaLow from "@amcharts/amcharts4-geodata/usaLow";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import Papa from 'papaparse';
@@ -87,7 +87,7 @@ let chart = null;
 let chart2 = null;
 let chart3 = null;
 
-am4core.useTheme(am4themes_animated);
+useTheme(am4themes_animated);
 const initialState = {
   visible: false,
   data: null,
@@ -95,6 +95,7 @@ const initialState = {
   grantamt: "",
   state: "...",
 };
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -106,11 +107,16 @@ class App extends Component {
     this.renderStateChart = this.renderStateChart.bind(this);
     this.renderSchoolChart = this.renderSchoolChart.bind(this);
     this.renderGeneralStats = this.renderGeneralStats.bind(this);
+    this.connecToServer = this.connecToServer.bind(this);
   }
 
   resetState = () => {
     statesArray = Array.from(new Set(statesArray));
     this.renderMap();
+  }
+
+  connecToServer() {
+    fetch('/');
   }
 
   dataCallback = (results, file) => {
@@ -124,8 +130,6 @@ class App extends Component {
     var i = 0;
     while (i < results.data.length) {
       //  @@@@@@@@@@@@@@
-      //console.log(currSchool);
-      //console.log(currState);
       schoolToState[currSchool] = currState.substring(3, 5);
 
 
@@ -229,25 +233,25 @@ class App extends Component {
 
   renderMap() {
     // Themes begin
-    am4core.useTheme(am4themes_animated);
+    useTheme(am4themes_animated);
     // Themes end
 
     // Create map instance
-    chart = am4core.create("chartdiv", am4maps.MapChart);
+    chart = create("chartdiv", MapChart);
 
     // Set map definition
     chart.geodata = am4geodata_usaLow;
 
     // Set projection
-    chart.projection = new am4maps.projections.AlbersUsa();
+    chart.projection = new projections.AlbersUsa();
 
-    chart.zoomControl = new am4maps.ZoomControl();
+    chart.zoomControl = new ZoomControl();
     chart.zoomControl.align = "left";
     chart.zoomControl.height = 100;
     chart.centerMap = true;
 
     // Create map polygon series
-    let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+    let polygonSeries = chart.series.push(new MapPolygonSeries());
 
     // Make map load polygon data (state shapes and names) from GeoJSON
     polygonSeries.useGeodata = true;
@@ -604,13 +608,6 @@ class App extends Component {
         stateMap: WY,
         full: "Wyoming",
       },
-      {
-        id: "US-WY",
-        value: 493782,
-        schools: [],
-        stateMap: WY,
-        full: "Wyoming",
-      }
     ];
 
     //  map the state to its index in sData
@@ -664,13 +661,13 @@ class App extends Component {
     });
 
     // Set up heat legend
-    let heatLegend = chart.createChild(am4maps.HeatLegend);
+    let heatLegend = chart.createChild(HeatLegend);
     heatLegend.series = polygonSeries;
     heatLegend.align = "right";
     heatLegend.dx = 25;
     heatLegend.valign = "top";
-    heatLegend.width = am4core.percent(25);
-    heatLegend.marginRight = am4core.percent(9);
+    heatLegend.width = percent(25);
+    heatLegend.marginRight = percent(9);
     heatLegend.minValue = 0;
     heatLegend.maxValue = 40000000;
 
@@ -695,7 +692,7 @@ class App extends Component {
 
     // Create hover state and set alternative fill color
     let hs = polygonTemplate.states.create("hover");
-    hs.properties.fill = am4core.color("#EE4742");
+    hs.properties.fill = color("#EE4742");
 
     polygonTemplate.events.on("hit", (ev) => {
       let state = ev.target.dataItem.dataContext;
@@ -703,16 +700,16 @@ class App extends Component {
       this.renderStateChart(state, polygonSeries.data);
     });
 
-    let imageSeries = chart.series.push(new am4maps.MapImageSeries());
+    let imageSeries = chart.series.push(new MapImageSeries()); //mapImageSeries
     imageSeries.mapImages.template.propertyFields.longitude = "longitude";
     imageSeries.mapImages.template.propertyFields.latitude = "latitude";
     imageSeries.mapImages.template.propertyFields.value = "value";
     imageSeries.data = this.state.data;
 
-    let circle = imageSeries.mapImages.template.createChild(am4core.Circle);
+    let circle = imageSeries.mapImages.template.createChild(Circle);
     circle.radius = 2;
-    circle.fill = am4core.color("#000000");
-    circle.stroke = am4core.color("#000000");
+    circle.fill = color("#000000");
+    circle.stroke = color("#000000");
     circle.strokeWidth = 2;
     circle.nonScaling = true;
     circle.tooltipText = "{title}: ${totalGrant}";
@@ -742,7 +739,7 @@ class App extends Component {
   }
 
   renderSchoolChart = (school) => {
-    chart3 = am4core.create("chartdiv2", am4charts.XYChart);
+    chart3 = create("chartdiv2", XYChart);
 
     let title = chart3.titles.create();
     title.text = "Grant amounts awarded to " + school.title;
@@ -752,7 +749,7 @@ class App extends Component {
     // Add data
     chart3.data = school.yearlyList;
     // Create axes
-    let categoryAxis = chart3.xAxes.push(new am4charts.CategoryAxis());
+    let categoryAxis = chart3.xAxes.push(new CategoryAxis());
     categoryAxis.dataFields.category = "year";
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.minGridDistance = 30;
@@ -762,9 +759,9 @@ class App extends Component {
     // categoryAxis.renderer.labels.template.verticalCenter = "middle";
     // categoryAxis.renderer.labels.template.rotation = 270;
 
-    let valueAxis = chart3.yAxes.push(new am4charts.ValueAxis());
+    let valueAxis = chart3.yAxes.push(new ValueAxis());
     // Create series
-    let series = chart3.series.push(new am4charts.ColumnSeries());
+    let series = chart3.series.push(new ColumnSeries());
     series.dataFields.valueY = "grantAmount";
     series.dataFields.value = "total"
     series.dataFields.categoryX = "year";
@@ -772,8 +769,8 @@ class App extends Component {
     series.stacked = true;
     series.columns.template.tooltipText = "Total: [bold]${valueY}[/]\nGrants: [bold]{total}";
     series.columns.template.fillOpacity = .8;
-    series.stroke = am4core.color("#B4D9DB");
-    series.columns.template.fill = am4core.color("#B4D9DB");
+    series.stroke = color("#B4D9DB");
+    series.columns.template.fill = color("#B4D9DB");
 
     let columnTemplate = series.columns.template;
     columnTemplate.strokeWidth = 2;
@@ -783,7 +780,7 @@ class App extends Component {
 
   renderStateChart = (state, stateData) => {
 
-    chart2 = am4core.create("chartdiv2", am4charts.XYChart);
+    chart2 = create("chartdiv2", XYChart);
 
     let title = chart2.titles.create();
     title.text = "Top 5 Schools in " +  state.name;
@@ -799,7 +796,7 @@ class App extends Component {
     chart2.data = schoolData.slice(0, 5);
 
     // Create axes
-    let categoryAxis = chart2.xAxes.push(new am4charts.CategoryAxis());
+    let categoryAxis = chart2.xAxes.push(new CategoryAxis());
     categoryAxis.dataFields.category = "title";
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.minGridDistance = 30;
@@ -808,17 +805,17 @@ class App extends Component {
     categoryAxis.renderer.labels.template.wrap = true;
     categoryAxis.renderer.labels.template.maxWidth = 75;
 
-    let valueAxis = chart2.yAxes.push(new am4charts.ValueAxis());
+    let valueAxis = chart2.yAxes.push(new ValueAxis());
 
     // Create series
-    let series = chart2.series.push(new am4charts.ColumnSeries());
+    let series = chart2.series.push(new ColumnSeries());
     series.dataFields.valueY = "totalGrant";
     series.dataFields.categoryX = "title";
     series.name = "Visits";
     series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
     series.columns.template.fillOpacity = .8;
-    series.stroke = am4core.color("#B4D9DB");
-    series.columns.template.fill = am4core.color("#B4D9DB");
+    series.stroke = color("#B4D9DB");
+    series.columns.template.fill = color("#B4D9DB");
 
     series.columns.template.events.on("hit", function (ev) {
       console.log("clicked on ", ev.target._dataItem.categories.categoryX);
@@ -841,6 +838,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.connecToServer();
     this.loadData();
   }
 
@@ -852,7 +850,7 @@ class App extends Component {
 
   renderState = (state) => {
 
-    chart = am4core.create("chartdiv", am4maps.MapChart);
+    chart = create("chartdiv", MapChart);
 
     this.setState({ state: state.name });
     // Set map definition
@@ -864,10 +862,10 @@ class App extends Component {
     title.marginBottom = 30;
 
     // Set projection
-    chart.projection = new am4maps.projections.Miller();
+    chart.projection = new projections.Miller(); 
 
     // Create map polygon series
-    var polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+    var polygonSeries = chart.series.push(new MapPolygonSeries());
 
     // Exclude Antartica
     polygonSeries.exclude = ["AQ"];
@@ -875,24 +873,24 @@ class App extends Component {
     // Make map load polygon (like country names) data from GeoJSON
     polygonSeries.useGeodata = true;
 
-    chart.zoomControl = new am4maps.ZoomControl();
+    chart.zoomControl = new ZoomControl();
     chart.zoomControl.align = "left";
     chart.zoomControl.height = 100;
 
     // Configure series
     var polygonTemplate = polygonSeries.mapPolygons.template;
     polygonTemplate.tooltipText = "{name}";
-    polygonTemplate.fill = am4core.color("#93A9B7");
+    polygonTemplate.fill = color("#93A9B7");
 
     // Create hover state and set alternative fill color
     var hs = polygonTemplate.states.create("hover");
-    hs.properties.fill = am4core.color("#EE4742");
+    hs.properties.fill = color("#EE4742");
 
     polygonTemplate.events.on("hit", (ev) => {
       ev.target.series.chart.zoomToMapObject(ev.target);
     });
 
-    let imageSeries = chart.series.push(new am4maps.MapImageSeries());
+    let imageSeries = chart.series.push(new MapImageSeries()); //mapImageSeries
     imageSeries.mapImages.template.propertyFields.longitude = "longitude";
     imageSeries.mapImages.template.propertyFields.latitude = "latitude";
     imageSeries.mapImages.template.propertyFields.value = "value";
@@ -902,10 +900,10 @@ class App extends Component {
       }
     });
 
-    let circle = imageSeries.mapImages.template.createChild(am4core.Circle);
+    let circle = imageSeries.mapImages.template.createChild(Circle);
     circle.radius = 2;
-    circle.fill = am4core.color("#000000");
-    circle.stroke = am4core.color("#000000");
+    circle.fill = color("#000000");
+    circle.stroke = color("#000000");
     circle.strokeWidth = 2;
     circle.nonScaling = true;
     circle.tooltipText = "{title}: ${totalGrant}";
